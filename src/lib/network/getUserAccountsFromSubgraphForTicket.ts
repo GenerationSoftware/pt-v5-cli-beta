@@ -1,7 +1,7 @@
 import makeGraphQlQuery from '../utils/makeGraphQlQuery'
 import getSubgraphUrlForNetwork from '../utils/getSubgraphUrlForNetwork'
 
-async function getUserAccountsFromSubgraphForTicket(
+export async function getUserAccountsFromSubgraphForTicket(
   chainId: string,
   ticket: string,
   drawStartTime: number,
@@ -19,4 +19,3 @@ async function getUserAccountsFromSubgraphForTicket(
   return allUserBalances.flat(1)
 }
 
-export default getUserAccountsFromSubgraphForTicket

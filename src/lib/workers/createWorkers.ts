@@ -3,7 +3,7 @@ import {resolve} from 'node:path'
 import Piscina from 'piscina'
 import {NormalizedUserBalance, Prize, Draw, PrizeDistribution, utils} from '@pooltogether/v4-utils-js'
 
-async function runCalculateDrawResultsWorker(
+export async function runCalculateDrawResultsWorker(
   normalizedUserBalances?: NormalizedUserBalance[],
   prizeDistribution?: PrizeDistribution,
   draw?: Draw,
@@ -56,4 +56,3 @@ async function runCalculateDrawResultsWorker(
   return filteredPrizes
 }
 
-export default runCalculateDrawResultsWorker

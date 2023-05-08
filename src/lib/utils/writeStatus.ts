@@ -1,4 +1,4 @@
-import writeToOutput from './writeToOutput'
+import writeToOutput from './writeOutput'
 
 export function writeStatus(outputDir: string, json: any): void {
   writeToOutput(outputDir, 'status', json)

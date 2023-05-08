@@ -1,4 +1,4 @@
-function createExitCode(error:any, _this: any): any {
+export function createExitCode(error:any, _this: any): any {
   const e = error as any
   switch (e?.code) {
   case 'PROVIDER_ERROR':
@@ -14,4 +14,3 @@ function createExitCode(error:any, _this: any): any {
   throw error
 }
 
-export default createExitCode

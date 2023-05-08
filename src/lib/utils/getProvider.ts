@@ -16,7 +16,7 @@ const providers: Providers = {
   421613: new JsonRpcProvider(process.env.ARBITRUM_GOERLI_RPC_URL),
 }
 
-const getProvider = (chainId: string): JsonRpcProvider => {
+export const getProvider = (chainId: string): JsonRpcProvider => {
   const provider = providers[chainId]
 
   if (!provider) {
@@ -26,4 +26,3 @@ const getProvider = (chainId: string): JsonRpcProvider => {
   return provider
 }
 
-export default getProvider

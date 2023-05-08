@@ -1,7 +1,7 @@
 import {getContractsByType, sortContractsByChainId} from '@pooltogether/v4-client-js'
 import {mainnet, testnet} from '@pooltogether/v4-pool-data'
 
-function getContract(chainId: string, name: string, isTestnet?: boolean): any {
+export function getContract(chainId: string, name: string, isTestnet?: boolean): any {
   try {
     const network = isTestnet ? testnet : mainnet
     // @ts-ignore
@@ -14,4 +14,3 @@ function getContract(chainId: string, name: string, isTestnet?: boolean): any {
   }
 }
 
-export default getContract

@@ -15,8 +15,6 @@ Primary CLI Commands (help)
 
 ```sh
 npx @pooltogether/v5-cli help compute drawPrizes
-npx @pooltogether/v5-cli help compute poolPrizes
-npx @pooltogether/v5-cli help compute networkPrizes
 ```
 
 # ⌨️ CLI Installation
@@ -41,20 +39,20 @@ USAGE
 ptv5 compute drawPrizes
 ```
 
-Computes single Draw prizes for a PrizePool to a target output directory.
+Computes the previous draw's prizes for a PrizePool to a target output directory.
 
-Simply pass a `chainId`, `ticket` `drawId` and `outDir` to compute and locally save the results.
+Simply pass a `chainId`, `prizePool` and `outDir` to compute and locally save the results.
 
 ```
 USAGE
-  $ ptv5 compute drawPrizes --chainId 1 --drawId 65 --outDir ./temp --ticket '0xdd4d117723C257CEe402285D3aCF218E9A8236E1'
+  $ ptv5 compute drawPrizes --chainId 1 --outDir ./temp --prizePool '0xdd4d117723C257CEe402285D3aCF218E9A8236E1'
 
 DESCRIPTION
-  Computes single Draw prizes for a PrizePool to a target output directory.
+  Computes the previous draw's prizes for a PrizePool to a target output directory.
 
 EXAMPLES
-  $ ptv5 compute drawPrizes --chainId 1 --drawId 1 --ticket 0x0000000000000000000000000000000000000000 --outDir ./temp
-    Running compute:drawPrizes on chainId: 1 using drawID: 1
+  $ ptv5 compute drawPrizes --chainId 1 --prizePool 0x0000000000000000000000000000000000000000 --outDir ./temp
+    Running compute:drawPrizes on chainId: 1
 ```
 
 ## Status File (status.json)
@@ -93,46 +91,6 @@ EXAMPLES
 }
 ```
 
-
-## Compute PrizePool Prizes
-
-Computes all historical Draw prizes for a PrizePool to a target output directory.
-
-```sh-session
-ptv5 compute poolPrizes
-```
-
-```
-USAGE
-  $ ptv5 compute poolPrizes --chainId 1 --outDir ./temp --ticket '0xdd4d117723C257CEe402285D3aCF218E9A8236E1'
-
-DESCRIPTION
-  Computes all historical Draw prizes for a PrizePool to a target output directory.
-
-EXAMPLES
-  $ ptv5 compute poolPrizes --chainId 1 --ticket 0x0000000000000000000000000000000000000000 --outDir ./temp
-    Running compute:drawPrizes on chainId: 1 using drawID: 1
-```
-
-## Compute Network of PrizePool Prizes
-
-Computes Draw prizes for all PoolTogether V5 network PrizePools to a target output directory.
-
-```sh-session
-ptv5 compute networkPrizes
-```
-
-```
-USAGE
-  $ ptv5 compute networkPrizes --outDir ./temp
-
-DESCRIPTION
-  Computes Draw prizes for all PoolTogether V5 network PrizePools to a target output directory.
-
-EXAMPLES
-  $ ptv5 compute poolPrizes --chainId 1 --ticket 0x0000000000000000000000000000000000000000 --outDir ./temp
-    Running compute:drawPrizes on chainId: 1 using drawID: 1
-```
 
 ## Help
 
