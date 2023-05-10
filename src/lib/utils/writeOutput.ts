@@ -1,15 +1,19 @@
 // eslint-disable-next-line unicorn/prefer-node-protocol
-// import {Prize} from '@pooltogether/v4-utils-js'
+import {Claim} from '@pooltogether/v5-utils-js'
 import {writeFileSync, mkdirSync} from 'fs'
 type File = any
 
 export function writePrizesToOutput(
   outDir: string,
-  allPrizes: Prize[][],
+  allClaims: Claim[],
 ): void {
-  for (const depositorPrizes of allPrizes) {
-    const address = depositorPrizes[0].address.toLowerCase()
-    writeToOutput(outDir, address.toLowerCase(), depositorPrizes)
+  for (const claim of allClaims) {
+    console.log('claim')
+    console.log(claim)
+    // const address = claim
+    const address = '0xface'
+    // const address = claim[0].address.toLowerCase()
+    writeToOutput(outDir, address.toLowerCase(), claim)
   }
 }
 
