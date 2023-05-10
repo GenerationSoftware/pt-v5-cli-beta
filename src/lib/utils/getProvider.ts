@@ -1,7 +1,9 @@
-import {JsonRpcProvider} from '@ethersproject/providers'
+import { JsonRpcProvider } from '@ethersproject/providers'
 
 type Providers = { [k: string]: JsonRpcProvider };
 
+// eg.
+// https://mainnet.infura.io/v3/<YOUR-API-KEY>
 const providers: Providers = {
   // mainnets
   1: new JsonRpcProvider(process.env.ETHEREUM_MAINNET_RPC_URL),

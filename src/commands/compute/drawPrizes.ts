@@ -1,5 +1,6 @@
 import { Command, Flags } from "@oclif/core";
-import { BigNumber } from "@ethersproject/bignumber";
+import { Contract } from "ethers";
+// import { BigNumber } from "@ethersproject/bignumber";
 // import { PrizeDistributor, PrizePool } from "@pooltogether/v4-client-js";
 // import { mainnet, testnet } from "@pooltogether/v4-pool-data";
 // import {
@@ -23,7 +24,12 @@ import { createOutputPath } from "../../lib/utils/createOutputPath";
 import { createExitCode } from "../../lib/utils/createExitCode";
 import { writeToOutput, writePrizesToOutput } from "../../lib/utils/writeOutput";
 import { verifyAgainstSchema } from "../../lib/utils/verifyAgainstSchema";
-import { sumPrizeAmounts } from "../../lib/utils";
+// import { sumPrizeAmounts } from "../../lib/utils";
+
+interface TiersContext {
+  numberOfTiers: number;
+  rangeArray: number[];
+}
 
 /**
  * @name DrawPrizes
@@ -67,7 +73,18 @@ export default class DrawPrizes extends Command {
     this.warn("Failed to calculate Draw Prizes (" + error + ")");
     const statusFailure = updateStatusFailure(DrawPrizes.statusLoading.createdAt, error);
 
-    const prizePoolContract = getContract("");
+    const contractsVersion = {
+      major: 1,
+      minor: 0,
+      patch: 0,
+    };
+    const prizePoolContract = getContract(
+      "PrizePool",
+      chainId,
+      readProvider,
+      contracts,
+      contractsVersion
+    );
 
     const drawId = await prizePoolContract.getLastDrawId();
 
@@ -176,3 +193,19 @@ export default class DrawPrizes extends Command {
     writeToOutput(outDirWithSchema, "status", statusSuccess);
   }
 }
+
+/**
+ * Gather information about the given prize pool's last drawId and tiers
+ * @returns {Promise} Promise with drawId and tiers
+ */
+const getPrizePoolData = async (
+  prizePool: Contract
+): Promise<{ drawId: number; tiers: TiersContext }> => {
+  const drawId = await prizePool.getLastCompletedDrawId();
+
+  const numberOfTiers = await prizePool.numberOfTiers();
+  const rangeArray = Array.from({ length: numberOfTiers + 1 }, (value, index) => index);
+  const tiers: TiersContext = { numberOfTiers, rangeArray };
+
+  return { drawId, tiers };
+};

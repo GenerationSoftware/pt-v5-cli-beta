@@ -5,7 +5,6 @@ export interface SuccessStats {
     amountsTotal: string;
 }
 
-
 export function createStatus(): Status {
   return {
     status: 'LOADING',
