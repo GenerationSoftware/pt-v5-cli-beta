@@ -1,5 +1,7 @@
 import { Command, Flags } from "@oclif/core";
 import { Contract } from "ethers";
+import { getContract } from "@pooltogether/v5-utils-js";
+import { testnetContractsBlob as contracts } from "@pooltogether/v5-utils-js";
 // import { BigNumber } from "@ethersproject/bignumber";
 // import { PrizeDistributor, PrizePool } from "@pooltogether/v4-client-js";
 // import { mainnet, testnet } from "@pooltogether/v4-pool-data";
@@ -73,6 +75,7 @@ export default class DrawPrizes extends Command {
     this.warn("Failed to calculate Draw Prizes (" + error + ")");
     const statusFailure = updateStatusFailure(DrawPrizes.statusLoading.createdAt, error);
 
+    const readProvider = getProvider(chainId);
     const contractsVersion = {
       major: 1,
       minor: 0,
@@ -80,13 +83,17 @@ export default class DrawPrizes extends Command {
     };
     const prizePoolContract = getContract(
       "PrizePool",
-      chainId,
+      Number(chainId),
       readProvider,
       contracts,
       contractsVersion
     );
 
-    const drawId = await prizePoolContract.getLastDrawId();
+    const drawId = await prizePoolContract?.getLastDrawId();
+    console.log("prizePoolContract");
+    console.log(prizePoolContract);
+    console.log("drawId");
+    console.log(drawId);
 
     const outDirWithSchema = createOutputPath(outDir, chainId, prizePool.toLowerCase(), drawId);
     writeToOutput(outDirWithSchema, "status", statusFailure);
@@ -100,25 +107,44 @@ export default class DrawPrizes extends Command {
       `Running "calculate:prizes" on chainId: ${chainId} for prizePool: ${prizePool} using latest drawID`
     );
 
-    const network = isTestnet(chainId) ? testnet : mainnet;
-    console.log({ network });
+    // const network = isTestnet(chainId) ? testnet : mainnet;
+    // console.log({ network });
 
-    const drawId = getLastDrawId();
+    // const drawId = getLastDrawId();
 
     /* -------------------------------------------------- */
     // Create Status File
     /* -------------------------------------------------- */
     // const ContractPrizePool = getContract(chainId, "YieldSourcePrizePool", isTestnet(chainId));
     // const ContractPrizeDistributor = getContract(chainId, "PrizeDistributor", isTestnet(chainId));
-    const outDirWithSchema = createOutputPath(outDir, chainId, prizePool, drawId);
-    writeToOutput(outDirWithSchema, "status", DrawPrizes.statusLoading);
+    // const outDirWithSchema = createOutputPath(outDir, chainId, prizePool, drawId);
+    // writeToOutput(outDirWithSchema, "status", DrawPrizes.statusLoading);
 
     /* -------------------------------------------------- */
     // Data Fetching
     /* -------------------------------------------------- */
     // console.log(testnet, 'testnet')
     // @ts-ignore
-    const prizePool = new PrizePool(ContractPrizePool, getProvider(chainId), network.contracts);
+    // const prizePoolContract = new PrizePool(
+    //   ContractPrizePool,
+    //   getProvider(chainId),
+    //   network.contracts
+    // );
+    const readProvider = getProvider(chainId);
+    const contractsVersion = {
+      major: 1,
+      minor: 0,
+      patch: 0,
+    };
+    const prizePoolContract = getContract(
+      "PrizePool",
+      Number(chainId),
+      readProvider,
+      contracts,
+      contractsVersion
+    );
+
+    console.log(prizePoolContract);
     // @ts-ignore
     // const prizeDistributor = new PrizeDistributor(
     //   ContractPrizeDistributor,
@@ -180,17 +206,17 @@ export default class DrawPrizes extends Command {
     //   Draw
     // );
     // const _flatPrizes = prizes.flat(1);
-    const prizes: Prize[][] = [];
-    !verifyAgainstSchema(_flatPrizes) &&
-      this.error("Prizes DataStructure is not valid against schema");
-    writeToOutput(outDirWithSchema, "prizes", _flatPrizes);
-    writePrizesToOutput(outDirWithSchema, prizes);
+    // const prizes: Prize[][] = [];
+    // !verifyAgainstSchema(_flatPrizes) &&
+    //   this.error("Prizes DataStructure is not valid against schema");
+    // writeToOutput(outDirWithSchema, "prizes", _flatPrizes);
     // writePrizesToOutput(outDirWithSchema, prizes);
-    const statusSuccess = updateStatusSuccess(DrawPrizes.statusLoading.createdAt, {
-      prizeLength: _flatPrizes.length,
-      amountsTotal: sumPrizeAmounts(_flatPrizes),
-    });
-    writeToOutput(outDirWithSchema, "status", statusSuccess);
+    // writePrizesToOutput(outDirWithSchema, prizes);
+    // const statusSuccess = updateStatusSuccess(DrawPrizes.statusLoading.createdAt, {
+    //   prizeLength: _flatPrizes.length,
+    //   amountsTotal: sumPrizeAmounts(_flatPrizes),
+    // });
+    // writeToOutput(outDirWithSchema, "status", statusSuccess);
   }
 }
 
