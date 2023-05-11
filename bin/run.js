@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --loader ts-node/esm --experimental-specifier-resolution=node
 
 import oclif from "@oclif/core";
 

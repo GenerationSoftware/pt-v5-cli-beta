@@ -90,10 +90,7 @@ export default class DrawPrizes extends Command {
     );
 
     const drawId = await prizePoolContract?.getLastDrawId();
-    console.log("prizePoolContract");
     console.log(prizePoolContract);
-    console.log("drawId");
-    console.log(drawId);
 
     const outDirWithSchema = createOutputPath(outDir, chainId, prizePool.toLowerCase(), drawId);
     writeToOutput(outDirWithSchema, "status", statusFailure);
