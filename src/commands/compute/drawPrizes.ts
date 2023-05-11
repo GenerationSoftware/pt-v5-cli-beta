@@ -6,31 +6,13 @@ import {
   getSubgraphVaults,
   getWinnersClaims,
 } from "@pooltogether/v5-utils-js";
-// import { BigNumber } from "@ethersproject/bignumber";
-// import { PrizeDistributor, PrizePool } from "@pooltogether/v4-client-js";
-// import { mainnet, testnet } from "@pooltogether/v4-pool-data";
-// import {
-//   calculateUserBalanceFromAccount,
-//   calculateNormalizedUserBalancesFromTotalSupply,
-//   utils,
-//   Account,
-//   NormalizedUserBalance,
-//   Prize,
-//   UserBalance,
-// } from "@pooltogether/v4-utils-js";
-
-// import { getUserAccountsFromSubgraphForTicket } from "../../lib/network/getUserAccountsFromSubgraphForTicket";
-// import { runCalculateDrawResultsWorker } from "../../lib/workers/createWorkers";
 
 import { createStatus, updateStatusFailure, updateStatusSuccess } from "../../lib/utils/status";
-// import { getContract } from "../../lib/utils/getContract";
 import { getProvider } from "../../lib/utils/getProvider";
-import { isTestnet } from "../../lib/utils/isTestnet";
 import { createOutputPath } from "../../lib/utils/createOutputPath";
 import { createExitCode } from "../../lib/utils/createExitCode";
 import { writeToOutput, writePrizesToOutput } from "../../lib/utils/writeOutput";
 import { verifyAgainstSchema } from "../../lib/utils/verifyAgainstSchema";
-// import { sumPrizeAmounts } from "../../lib/utils";
 
 interface TiersContext {
   numberOfTiers: number;
@@ -70,17 +52,16 @@ export default class DrawPrizes extends Command {
   static args = [];
   static statusLoading = createStatus();
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  // TODO: Fix this so it makes sense with new v5:
   public async catch(error: any): Promise<any> {
     this.log(error, "_error drawPrizes");
     const { flags } = await this.parse(DrawPrizes);
     const { chainId, prizePool, outDir } = flags;
-    // const prizeDistributorContract = getContract(chainId, "PrizeDistributor");
     this.warn("Failed to calculate Draw Prizes (" + error + ")");
     const statusFailure = updateStatusFailure(DrawPrizes.statusLoading.createdAt, error);
 
-    // const outDirWithSchema = createOutputPath(outDir, chainId, prizePool.toLowerCase(), drawId);
-    // writeToOutput(outDirWithSchema, "status", statusFailure);
+    const outDirWithSchema = createOutputPath(outDir, chainId, prizePool.toLowerCase(), drawId);
+    writeToOutput(outDirWithSchema, "status", statusFailure);
     createExitCode(error, this);
   }
 
