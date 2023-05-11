@@ -8,12 +8,8 @@ export function writePrizesToOutput(
   allClaims: Claim[],
 ): void {
   for (const claim of allClaims) {
-    console.log('claim')
-    console.log(claim)
-    // const address = claim
-    const address = '0xface'
-    // const address = claim[0].address.toLowerCase()
-    writeToOutput(outDir, address.toLowerCase(), claim)
+    const {vault, tier, winner} = claim
+    writeToOutput(outDir, `${vault}-${tier}-${winner.toLowerCase()}`, claim)
   }
 }
 

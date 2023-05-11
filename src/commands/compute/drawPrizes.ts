@@ -1,7 +1,11 @@
 import { ethers, Contract } from "ethers";
 import { Provider } from "@ethersproject/providers";
 import { Command, Flags } from "@oclif/core";
-import { getContracts, testnetContractsBlob as contracts } from "@pooltogether/v5-utils-js";
+import {
+  testnetContractsBlob as contracts,
+  getSubgraphVaults,
+  getWinnersClaims,
+} from "@pooltogether/v5-utils-js";
 // import { BigNumber } from "@ethersproject/bignumber";
 // import { PrizeDistributor, PrizePool } from "@pooltogether/v4-client-js";
 // import { mainnet, testnet } from "@pooltogether/v4-pool-data";
@@ -41,7 +45,7 @@ export default class DrawPrizes extends Command {
     "Computes the previous draw's prizes for a PrizePool to a target output directory.";
   static examples = [
     `$ ptv5 compute drawPrizes --chainId 1 --prizePool 0x0000000000000000000000000000000000000000 --outDir ./temp
-       Running compute:drawPrizes on chainId: 1 for prizePool: 0x00 using latest drawID
+       Running compute:drawPrizes on chainId: 1 for prizePool: 0x0 using latest drawID
   `,
   ];
 
@@ -68,7 +72,7 @@ export default class DrawPrizes extends Command {
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   public async catch(error: any): Promise<any> {
-    console.log(error, "_error drawPrizes");
+    this.log(error, "_error drawPrizes");
     const { flags } = await this.parse(DrawPrizes);
     const { chainId, prizePool, outDir } = flags;
     // const prizeDistributorContract = getContract(chainId, "PrizeDistributor");
@@ -83,8 +87,9 @@ export default class DrawPrizes extends Command {
   public async run(): Promise<void> {
     const { flags } = await this.parse(DrawPrizes);
     const { chainId, prizePool, outDir } = flags;
+    this.log("");
     this.log(
-      `Running "calculate:prizes" on chainId: ${chainId} for prizePool: ${prizePool} using latest drawID`
+      `Running "calculate:prizes" on chainId: ${chainId} for prizePool: ${prizePool.toLowerCase()} using latest drawID`
     );
 
     const readProvider = getProvider(chainId);
@@ -92,105 +97,51 @@ export default class DrawPrizes extends Command {
     const prizePoolContract = getPrizePoolByAddress(Number(chainId), prizePool, readProvider);
 
     const drawId = await prizePoolContract?.getLastCompletedDrawId();
-    console.log(drawId);
-
-    // const network = isTestnet(chainId) ? testnet : mainnet;
-    // console.log({ network });
-
-    // const drawId = getLastDrawId();
+    this.log(`DrawID: #${drawId.toString()}`);
 
     /* -------------------------------------------------- */
     // Create Status File
     /* -------------------------------------------------- */
-    // const ContractPrizePool = getContract(chainId, "YieldSourcePrizePool", isTestnet(chainId));
-    // const ContractPrizeDistributor = getContract(chainId, "PrizeDistributor", isTestnet(chainId));
-    // const outDirWithSchema = createOutputPath(outDir, chainId, prizePool, drawId);
-    // writeToOutput(outDirWithSchema, "status", DrawPrizes.statusLoading);
+    const outDirWithSchema = createOutputPath(outDir, chainId, prizePool, drawId);
+    writeToOutput(outDirWithSchema, "status", DrawPrizes.statusLoading);
 
     /* -------------------------------------------------- */
     // Data Fetching
     /* -------------------------------------------------- */
-    // console.log(testnet, 'testnet')
     // @ts-ignore
-    // const prizePoolContract = new PrizePool(
-    //   ContractPrizePool,
-    //   getProvider(chainId),
-    //   network.contracts
-    // );
-
-    // console.log(prizePoolContract);
-    // @ts-ignore
-    // const prizeDistributor = new PrizeDistributor(
-    //   ContractPrizeDistributor,
-    //   getProvider(chainId),
-    //   network.contracts
-    // );
-    // const ContractDrawBuffer = (await prizeDistributor.getDrawBufferContract()) as any;
-    // const ContractPrizeDistributionsBuffer =
-    //   (await prizeDistributor.getPrizeDistributionsBufferContract()) as any;
-    // const ContractTicket = (await prizePool.getTicketContract()) as any;
-    // const Draw = await ContractDrawBuffer.getDraw(drawId);
-    // const PrizeDistribution = await ContractPrizeDistributionsBuffer.getPrizeDistribution(drawId);
-    // const drawStartTimestamp = Draw.timestamp - PrizeDistribution.startTimestampOffset;
-    // const drawEndTimestamp = Draw.timestamp - PrizeDistribution.endTimestampOffset;
-    // const ticketTotalSupplies: BigNumber[] = await ContractTicket.getAverageTotalSuppliesBetween(
-    //   [drawStartTimestamp],
-    //   [drawEndTimestamp]
-    // );
-    // const userAccounts = await getUserAccountsFromSubgraphForTicket(
-    //   chainId,
-    //   ticket,
-    //   drawStartTimestamp,
-    //   drawEndTimestamp
-    // );
+    const vaults = await getSubgraphVaults(chainId);
+    if (vaults.length === 0) {
+      throw new Error("No vaults found in subgraph");
+    }
+    this.log(`${vaults.length.toString()} vaults.`);
 
     /* -------------------------------------------------- */
     // Computation
     /* -------------------------------------------------- */
-    // const userBalances: any[] = userAccounts.map((account: Account) => {
-    //   const balance = calculateUserBalanceFromAccount(
-    //     account,
-    //     drawStartTimestamp,
-    //     drawEndTimestamp
-    //   );
-    //   if (!balance) {
-    //     return;
-    //   }
+    const prizePoolData = await getPrizePoolData(prizePoolContract);
 
-    //   return {
-    //     balance,
-    //     address: account.id,
-    //   };
-    // });
-    // const filteredUserBalances: UserBalance[] =
-    //   utils.filterUndefinedValues<UserBalance>(userBalances);
-    // const normalizedUserBalances: NormalizedUserBalance[] =
-    //   calculateNormalizedUserBalancesFromTotalSupply(filteredUserBalances, ticketTotalSupplies[0]);
+    const claims = await getWinnersClaims(
+      readProvider,
+      contracts,
+      vaults,
+      prizePoolData.tiers.rangeArray
+    );
+    this.log(`${claims.length.toString()} prizes.`);
 
     /* -------------------------------------------------- */
-    // Compute Prizes & Write to Disk
+    // Write to Disk
     /* -------------------------------------------------- */
-    /**
-     * @TODO: Add error handling on an account level, so if a worker fails, we can still
-     *        continue to the next account while catching the error for an individual account.
-     */
-    // const prizes: Prize[][] = await runCalculateDrawResultsWorker(
-    //   normalizedUserBalances,
-    //   PrizeDistribution,
-    //   Draw
-    // );
-    // const _flatPrizes = prizes.flat(1);
-    // const prizes: Prize[][] = [];
-    // !verifyAgainstSchema(_flatPrizes) &&
-    //   this.error("Prizes DataStructure is not valid against schema");
-    // writeToOutput(outDirWithSchema, "prizes", _flatPrizes);
-    // writePrizesToOutput(outDirWithSchema, prizes);
-    // writePrizesToOutput(outDirWithSchema, prizes);
-    // const statusSuccess = updateStatusSuccess(DrawPrizes.statusLoading.createdAt, {
-    //   prizeLength: _flatPrizes.length,
-    //   amountsTotal: sumPrizeAmounts(_flatPrizes),
-    // });
-    // writeToOutput(outDirWithSchema, "status", statusSuccess);
+    // TODO: Verify schema:
+    // !verifyAgainstSchema(claims) && this.error("Prizes DataStructure is not valid against schema");
+    writeToOutput(outDirWithSchema, "prizes", claims);
+    writePrizesToOutput(outDirWithSchema, claims);
+    // TODO: Get amountsTotal working:
+    const statusSuccess = updateStatusSuccess(DrawPrizes.statusLoading.createdAt, {
+      prizeLength: claims.length,
+      amountsTotal: "1234556",
+      // amountsTotal: sumPrizeAmounts(_flatPrizes),
+    });
+    writeToOutput(outDirWithSchema, "status", statusSuccess);
   }
 }
 
