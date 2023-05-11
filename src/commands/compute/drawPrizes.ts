@@ -57,6 +57,13 @@ export default class DrawPrizes extends Command {
     this.log(error, "_error drawPrizes");
     const { flags } = await this.parse(DrawPrizes);
     const { chainId, prizePool, outDir } = flags;
+
+    const readProvider = getProvider(chainId);
+
+    const prizePoolContract = getPrizePoolByAddress(Number(chainId), prizePool, readProvider);
+
+    const drawId = await prizePoolContract?.getLastCompletedDrawId();
+
     this.warn("Failed to calculate Draw Prizes (" + error + ")");
     const statusFailure = updateStatusFailure(DrawPrizes.statusLoading.createdAt, error);
 
