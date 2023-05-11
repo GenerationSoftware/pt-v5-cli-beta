@@ -1,7 +1,7 @@
+import { ethers, Contract } from "ethers";
+import { Provider } from "@ethersproject/providers";
 import { Command, Flags } from "@oclif/core";
-import { Contract } from "ethers";
-import { getContract } from "@pooltogether/v5-utils-js";
-import { testnetContractsBlob as contracts } from "@pooltogether/v5-utils-js";
+import { getContracts, testnetContractsBlob as contracts } from "@pooltogether/v5-utils-js";
 // import { BigNumber } from "@ethersproject/bignumber";
 // import { PrizeDistributor, PrizePool } from "@pooltogether/v4-client-js";
 // import { mainnet, testnet } from "@pooltogether/v4-pool-data";
@@ -75,25 +75,8 @@ export default class DrawPrizes extends Command {
     this.warn("Failed to calculate Draw Prizes (" + error + ")");
     const statusFailure = updateStatusFailure(DrawPrizes.statusLoading.createdAt, error);
 
-    const readProvider = getProvider(chainId);
-    const contractsVersion = {
-      major: 1,
-      minor: 0,
-      patch: 0,
-    };
-    const prizePoolContract = getContract(
-      "PrizePool",
-      Number(chainId),
-      readProvider,
-      contracts,
-      contractsVersion
-    );
-
-    const drawId = await prizePoolContract?.getLastDrawId();
-    console.log(prizePoolContract);
-
-    const outDirWithSchema = createOutputPath(outDir, chainId, prizePool.toLowerCase(), drawId);
-    writeToOutput(outDirWithSchema, "status", statusFailure);
+    // const outDirWithSchema = createOutputPath(outDir, chainId, prizePool.toLowerCase(), drawId);
+    // writeToOutput(outDirWithSchema, "status", statusFailure);
     createExitCode(error, this);
   }
 
@@ -103,6 +86,13 @@ export default class DrawPrizes extends Command {
     this.log(
       `Running "calculate:prizes" on chainId: ${chainId} for prizePool: ${prizePool} using latest drawID`
     );
+
+    const readProvider = getProvider(chainId);
+
+    const prizePoolContract = getPrizePoolByAddress(Number(chainId), prizePool, readProvider);
+
+    const drawId = await prizePoolContract?.getLastCompletedDrawId();
+    console.log(drawId);
 
     // const network = isTestnet(chainId) ? testnet : mainnet;
     // console.log({ network });
@@ -127,21 +117,8 @@ export default class DrawPrizes extends Command {
     //   getProvider(chainId),
     //   network.contracts
     // );
-    const readProvider = getProvider(chainId);
-    const contractsVersion = {
-      major: 1,
-      minor: 0,
-      patch: 0,
-    };
-    const prizePoolContract = getContract(
-      "PrizePool",
-      Number(chainId),
-      readProvider,
-      contracts,
-      contractsVersion
-    );
 
-    console.log(prizePoolContract);
+    // console.log(prizePoolContract);
     // @ts-ignore
     // const prizeDistributor = new PrizeDistributor(
     //   ContractPrizeDistributor,
@@ -231,4 +208,29 @@ const getPrizePoolData = async (
   const tiers: TiersContext = { numberOfTiers, rangeArray };
 
   return { drawId, tiers };
+};
+
+const getPrizePoolByAddress = (
+  chainId: number,
+  prizePool: string,
+  readProvider: Provider
+): Contract => {
+  const prizePoolContractBlob = contracts.contracts.find(
+    (contract) =>
+      contract.chainId === Number(chainId) &&
+      contract.type === "PrizePool" &&
+      contract.address.toLowerCase() === prizePool.toLowerCase()
+  );
+
+  if (!prizePoolContractBlob) {
+    throw new Error(
+      `Multiple Contracts Unavailable: ${prizePool} on chainId: ${chainId} not found.`
+    );
+  }
+
+  return new ethers.Contract(
+    prizePoolContractBlob?.address,
+    prizePoolContractBlob?.abi,
+    readProvider
+  );
 };
