@@ -19,12 +19,12 @@
     "ptv5": "./bin/run.js"
   },
   "scripts": {
-    "build": "shx rm -rf dist && tsc -b",
+    "build": "shx rm -rf dist && tsc",
     "prepack": "yarn build && oclif manifest && oclif readme",
     "postpack": "shx rm -f oclif.manifest.json",
     "manifest": "oclif manifest",
     "version": "oclif readme && git add README.md",
-    "_ptv4": "./bin/run.js"
+    "_ptv5": "./bin/run.js"
   },
   "engines": {
     "node": ">=12.0.0"
