@@ -2,7 +2,7 @@
   "compilerOptions": {
     "declaration": true,
     "importHelpers": false,
-    "module": "commonjs",
+    "module": "ES2020",
     "outDir": "dist",
     "rootDir": "src",
     "strict": true,
@@ -10,6 +10,9 @@
     "esModuleInterop": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
+  },
+  "ts-node": {
+    "esm": true
   },
   "include": [
     "src/**/*"

@@ -8,6 +8,7 @@
   "homepage": "https://github.com/pooltogether/v5-cli",
   "bugs": "https://github.com/pooltogether/v5-cli/issues",
   "main": "dist/index.js",
+  "type": "module",
   "files": [
     "/bin",
     "/dist",
@@ -15,16 +16,15 @@
     "/oclif.manifest.json"
   ],
   "bin": {
-    "ptv5": "./bin/run"
+    "ptv5": "./bin/run.js"
   },
   "scripts": {
     "build": "shx rm -rf dist && tsc -b",
-    "postpack": "shx rm -f oclif.manifest.json",
-    "posttest": "yarn lint",
     "prepack": "yarn build && oclif manifest && oclif readme",
+    "postpack": "shx rm -f oclif.manifest.json",
     "manifest": "oclif manifest",
     "version": "oclif readme && git add README.md",
-    "_ptv4": "./bin/run"
+    "_ptv4": "./bin/run.js"
   },
   "engines": {
     "node": ">=12.0.0"
@@ -43,7 +43,8 @@
     "graphql": "^16.3.0",
     "graphql-request": "^4.0.0",
     "piscina": "^3.2.0",
-    "spawn-promise": "^0.1.8"
+    "spawn-promise": "^0.1.8",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "@oclif/test": "^2",
