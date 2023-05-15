@@ -4,11 +4,13 @@ type File = any
 
 export function writePrizesToOutput(
   outDir: string,
-  allClaims: Claim[],
+  claims: Claim[],
 ): void {
-  // TODO: Group claims by winner address, then iterate over grouped:
-  for (const claim of allClaims) {
-    writeToOutput(outDir, claim.winner.toLowerCase(), claim)
+  const winners = groupByWinner(claims)
+
+  for (const winner of Object.entries(winners)) {
+    const [winnerAddress, value] = winner
+    writeToOutput(outDir, winnerAddress.toLowerCase(), value)
   }
 }
 
@@ -24,4 +26,12 @@ export function writeToOutput(
 
 export function writeStatus(outputDir: string, json: any): void {
   writeToOutput(outputDir, 'status', json)
+}
+
+const groupByWinner = (claims: any) =>{
+  return claims.reduce(function (accumulator:any, value:any) {
+        accumulator[value.winner] = accumulator[value.winner] || [];
+        accumulator[value.winner].push(value);
+        return accumulator;
+    }, {});
 }

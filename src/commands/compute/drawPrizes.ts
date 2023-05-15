@@ -6,13 +6,14 @@ import {
   getSubgraphVaults,
   getWinnersClaims,
 } from "@pooltogether/v5-utils-js";
+import * as core from "@actions/core";
 
 import { createStatus, updateStatusFailure, updateStatusSuccess } from "../../lib/utils/status";
 import { getProvider } from "../../lib/utils/getProvider";
 import { createOutputPath } from "../../lib/utils/createOutputPath";
 import { createExitCode } from "../../lib/utils/createExitCode";
 import { writeToOutput, writePrizesToOutput } from "../../lib/utils/writeOutput";
-import { verifyAgainstSchema } from "../../lib/utils/verifyAgainstSchema";
+// import { verifyAgainstSchema } from "../../lib/utils/verifyAgainstSchema";
 
 interface TiersContext {
   numberOfTiers: number;
@@ -70,6 +71,8 @@ export default class DrawPrizes extends Command {
     const outDirWithSchema = createOutputPath(outDir, chainId, prizePool.toLowerCase(), drawId);
     writeToOutput(outDirWithSchema, "status", statusFailure);
     createExitCode(error, this);
+
+    core.setOutput("error", error);
   }
 
   public async run(): Promise<void> {
@@ -123,6 +126,7 @@ export default class DrawPrizes extends Command {
     // !verifyAgainstSchema(claims) && this.error("Prizes DataStructure is not valid against schema");
     writeToOutput(outDirWithSchema, "prizes", claims);
     writePrizesToOutput(outDirWithSchema, claims);
+
     // TODO: Get amountsTotal working:
     const statusSuccess = updateStatusSuccess(DrawPrizes.statusLoading.createdAt, {
       prizeLength: claims.length,
@@ -130,6 +134,12 @@ export default class DrawPrizes extends Command {
       // amountsTotal: sumPrizeAmounts(_flatPrizes),
     });
     writeToOutput(outDirWithSchema, "status", statusSuccess);
+
+    /* -------------------------------------------------- */
+    // GitHub Actions Output
+    /* -------------------------------------------------- */
+    core.setOutput("runStatus", "true");
+    core.setOutput("drawId", drawId.toString());
   }
 }
 
