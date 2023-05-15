@@ -9,13 +9,13 @@ import {
 } from "@pooltogether/v5-utils-js";
 import * as core from "@actions/core";
 
-import { createStatus, updateStatusFailure, updateStatusSuccess } from "../../lib/utils/status";
-import { getProvider } from "../../lib/utils/getProvider";
-import { createOutputPath } from "../../lib/utils/createOutputPath";
-import { createExitCode } from "../../lib/utils/createExitCode";
-import { writeToOutput, writePrizesToOutput } from "../../lib/utils/writeOutput";
-import { sumPrizeAmounts } from "../../lib/utils/sumPrizeAmounts";
-// import { verifyAgainstSchema } from "../../lib/utils/verifyAgainstSchema";
+import { createStatus, updateStatusFailure, updateStatusSuccess } from "../../lib/utils/status.js";
+import { getProvider } from "../../lib/utils/getProvider.js";
+import { createOutputPath } from "../../lib/utils/createOutputPath.js";
+import { createExitCode } from "../../lib/utils/createExitCode.js";
+import { writeToOutput, writePrizesToOutput } from "../../lib/utils/writeOutput.js";
+import { sumPrizeAmounts } from "../../lib/utils/sumPrizeAmounts.js";
+// import { verifyAgainstSchema } from "../../lib/utils/verifyAgainstSchema.js";
 
 interface TiersContext {
   numberOfTiers: number;
@@ -25,6 +25,7 @@ interface TiersContext {
 /**
  * @name DrawPrizes
  */
+// @ts-ignore
 export default class DrawPrizes extends Command {
   static description =
     "Computes the previous draw's prizes for a PrizePool to a target output directory.";

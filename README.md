@@ -6,7 +6,6 @@
 
 <br />
 
-
 # PoolTogether V5 CLI
 
 The `@pooltogether/v5-cli` [node module package](https://www.npmjs.com/package/@pooltogether/v5-cli) is a NODE command line interface (CLI) to interact with the **PoolTogether V5 protocol**. The CLI uses the `v5-autotasks-library` modules to fetch and run calculations/computations for essential PoolTogether V5 tasks.
@@ -18,19 +17,23 @@ npx @pooltogether/v5-cli help compute drawPrizes
 ```
 
 # ⌨️ CLI Installation
+
 <!-- usage -->
+
 ```sh-session
 $ npm install -g @pooltogether/v5-cli
 $ ptv5 COMMAND
 running command...
 $ ptv5 (--version)
-@pooltogether/v5-cli/0.1.11-beta.1 darwin-arm64 node-v16.17.0
+@pooltogether/v5-cli/0.0.1-beta.1 darwin-arm64 node-v18.16.0
 $ ptv5 --help [COMMAND]
 USAGE
   $ ptv5 COMMAND
 ...
 ```
+
 <!-- usagestop -->
+
 # Commands
 
 ## Compute Draw Prizes
@@ -91,7 +94,6 @@ EXAMPLES
 }
 ```
 
-
 ## Help
 
 ```sh-session
@@ -112,4 +114,37 @@ FLAGS
 
 DESCRIPTION
   Display help for ptv5.
+```
+
+## Development
+
+Prior to publishing the CLI on npm, as this uses ESM after you run `npm install` (or `yarn install`) you will need to modify your `./node_modules/.bin/oclif` and `./node_modules/.bin/oclif2` symlinks. You can use the following commands to do this:
+
+```sh
+cd node_modules/.bin &&
+  rm oclif &&
+  rm oclif2 &&
+  ln -nfs ../oclif/bin/run.js oclif &&
+  ln -nfs ../oclif/bin/run.js oclif2 &&
+  cd ../oclif/bin &&
+  mv dev dev.js &&
+  mv run run.js
+```
+
+Also replace the contents of node_modules/oclif/bin/run.js with the following:
+
+```js
+#!/usr/bin/env node --loader ts-node/esm --experimental-specifier-resolution=node
+
+const oclif = require("@oclif/core");
+
+oclif.run().then(require("@oclif/core/flush")).catch(require("@oclif/core/handle"));
+```
+
+### Using the tool in dev
+
+You can test the CLI while developing by using the following, with whichever chain / prizePool flags you want to test with:
+
+```
+./bin/run.js compute drawPrizes --chainId 80001 -o ./temp -p '0xA32C8f94191c9295634f0034eb2b0e2749e77974'
 ```
