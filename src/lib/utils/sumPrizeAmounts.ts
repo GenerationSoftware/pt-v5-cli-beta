@@ -1,12 +1,8 @@
-// import {BigNumber} from '@ethersproject/bignumber'
-// import {Prize} from '@pooltogether/v4-utils-js'
+import { BigNumber } from '@ethersproject/bignumber'
+import { Amounts } from '@pooltogether/v5-utils-js'
 
-// function sumPrizeAmounts(list: Prize[]): string {
-//   return list
-//   .map((prize: any) => prize.amount)
-//   // eslint-disable-next-line unicorn/no-array-reduce
-//   .reduce((a, b) => a.add(b), BigNumber.from(0))
-//   .toString()
-// }
-
-// export default sumPrizeAmounts
+export function sumPrizeAmounts(tierPrizeAmounts: Amounts): string {
+  return Object.values(tierPrizeAmounts)
+    .reduce((a, b) => a.add(b), BigNumber.from(0))
+    .toString()
+}

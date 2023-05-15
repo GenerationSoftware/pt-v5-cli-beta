@@ -11,3 +11,5 @@ oclif.manifest.json
 .envrc
 .DS_STORE
 .history
+.yalc
+yalc.lock

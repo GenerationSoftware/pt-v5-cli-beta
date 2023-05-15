@@ -5,6 +5,7 @@ import {
   testnetContractsBlob as contracts,
   getSubgraphVaults,
   getWinnersClaims,
+  getTierPrizeAmounts,
 } from "@pooltogether/v5-utils-js";
 import * as core from "@actions/core";
 
@@ -13,6 +14,7 @@ import { getProvider } from "../../lib/utils/getProvider";
 import { createOutputPath } from "../../lib/utils/createOutputPath";
 import { createExitCode } from "../../lib/utils/createExitCode";
 import { writeToOutput, writePrizesToOutput } from "../../lib/utils/writeOutput";
+import { sumPrizeAmounts } from "../../lib/utils/sumPrizeAmounts";
 // import { verifyAgainstSchema } from "../../lib/utils/verifyAgainstSchema";
 
 interface TiersContext {
@@ -99,6 +101,8 @@ export default class DrawPrizes extends Command {
     /* -------------------------------------------------- */
     // Data Fetching
     /* -------------------------------------------------- */
+    const prizePoolData = await getPrizePoolData(prizePoolContract);
+
     // @ts-ignore
     const vaults = await getSubgraphVaults(chainId);
     if (vaults.length === 0) {
@@ -106,17 +110,15 @@ export default class DrawPrizes extends Command {
     }
     this.log(`${vaults.length.toString()} vaults.`);
 
+    const tiersRangeArray = prizePoolData.tiers.rangeArray;
+
+    // Find out how much each tier won
+    const tierPrizeAmounts = await getTierPrizeAmounts(readProvider, contracts, tiersRangeArray);
+
     /* -------------------------------------------------- */
     // Computation
     /* -------------------------------------------------- */
-    const prizePoolData = await getPrizePoolData(prizePoolContract);
-
-    const claims = await getWinnersClaims(
-      readProvider,
-      contracts,
-      vaults,
-      prizePoolData.tiers.rangeArray
-    );
+    const claims = await getWinnersClaims(readProvider, contracts, vaults, tiersRangeArray);
     this.log(`${claims.length.toString()} prizes.`);
 
     /* -------------------------------------------------- */
@@ -127,11 +129,9 @@ export default class DrawPrizes extends Command {
     writeToOutput(outDirWithSchema, "prizes", claims);
     writePrizesToOutput(outDirWithSchema, claims);
 
-    // TODO: Get amountsTotal working:
     const statusSuccess = updateStatusSuccess(DrawPrizes.statusLoading.createdAt, {
       prizeLength: claims.length,
-      amountsTotal: "1234556",
-      // amountsTotal: sumPrizeAmounts(_flatPrizes),
+      amountsTotal: sumPrizeAmounts(tierPrizeAmounts),
     });
     writeToOutput(outDirWithSchema, "status", statusSuccess);
 
