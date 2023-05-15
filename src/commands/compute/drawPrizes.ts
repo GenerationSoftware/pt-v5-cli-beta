@@ -58,7 +58,7 @@ export default class DrawPrizes extends Command {
 
   // TODO: Fix this so it makes sense with new v5:
   public async catch(error: any): Promise<any> {
-    this.log(error, "_error drawPrizes");
+    // this.log(error, "_error drawPrizes");
     const { flags } = await this.parse(DrawPrizes);
     const { chainId, prizePool, outDir } = flags;
 
@@ -81,17 +81,17 @@ export default class DrawPrizes extends Command {
   public async run(): Promise<void> {
     const { flags } = await this.parse(DrawPrizes);
     const { chainId, prizePool, outDir } = flags;
-    this.log("");
-    this.log(
-      `Running "calculate:prizes" on chainId: ${chainId} for prizePool: ${prizePool.toLowerCase()} using latest drawID`
-    );
+    // this.log("");
+    // this.log(
+    //   `Running "calculate:prizes" on chainId: ${chainId} for prizePool: ${prizePool.toLowerCase()} using latest drawID`
+    // );
 
     const readProvider = getProvider(chainId);
 
     const prizePoolContract = getPrizePoolByAddress(Number(chainId), prizePool, readProvider);
 
     const drawId = await prizePoolContract?.getLastCompletedDrawId();
-    this.log(`DrawID: #${drawId.toString()}`);
+    // this.log(`DrawID: #${drawId.toString()}`);
 
     /* -------------------------------------------------- */
     // Create Status File
@@ -109,7 +109,7 @@ export default class DrawPrizes extends Command {
     if (vaults.length === 0) {
       throw new Error("No vaults found in subgraph");
     }
-    this.log(`${vaults.length.toString()} vaults.`);
+    // this.log(`${vaults.length.toString()} vaults.`);
 
     const tiersRangeArray = prizePoolData.tiers.rangeArray;
 
@@ -120,7 +120,7 @@ export default class DrawPrizes extends Command {
     // Computation
     /* -------------------------------------------------- */
     const claims = await getWinnersClaims(readProvider, contracts, vaults, tiersRangeArray);
-    this.log(`${claims.length.toString()} prizes.`);
+    // this.log(`${claims.length.toString()} prizes.`);
 
     /* -------------------------------------------------- */
     // Write to Disk
