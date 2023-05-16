@@ -5,6 +5,10 @@ interface amountsAsString {
   [key: string]: string;
 };
 
+interface amountPerPrizeAsString {
+  [key: string]: string;
+};
+
 interface ClaimWithAmount extends Claim {
   amount: string
 }
@@ -26,30 +30,23 @@ export function mapTierPrizeAmountsToString(tierPrizeAmounts: Amounts) {
   return obj;
 };
 
-// export function addTierPrizeAmountsToClaims(claims: Claim[], tierPrizeAmounts: Amounts): ClaimWithAmount[] {
-export function addTierPrizeAmountsToClaims(claims: Claim[], tierPrizeAmounts: Amounts): Claim[] {
+export function addTierPrizeAmountsToClaims(claims: Claim[], tierPrizeAmounts: Amounts): ClaimWithAmount[] {
   const claimsByTier = groupByTier(claims)
-  console.log('claimsByTier')
-  console.log(claimsByTier)
+  const claimsWithAmounts:ClaimWithAmount[] = []
+  const tierAmountPerPrize:amountPerPrizeAsString = {}
 
   for (const tier of Object.entries(tierPrizeAmounts)) {
     const [key, value] = tier
-  console.log('----------NEWNEWN---------')
-  console.log('----------NEWNEWN---------')
-  console.log('key')
-  console.log(key)
-  console.log('typeof key')
-  console.log(typeof key)
-  console.log('value')
-    console.log(value)
     const numberOfPrizes = claimsByTier[key].length
-    console.log('numberOfPrizes')
-    console.log(numberOfPrizes)
-
-    tierPrizeAmounts[key] = BigNumber.from(value).div(numberOfPrizes)
+    tierAmountPerPrize[key] = BigNumber.from(value).div(numberOfPrizes).toString()
   }
 
-  return claims
+  for (const claim of claims) {
+    const claimWithAmount = {...claim, amount: tierAmountPerPrize[claim.tier.toString()]}
+    claimsWithAmounts.push(claimWithAmount)
+  }
+
+  return claimsWithAmounts
 }
 
 const groupByTier = (claims: any) =>{
@@ -59,5 +56,3 @@ const groupByTier = (claims: any) =>{
         return accumulator;
     }, {});
 }
-
-// it would prob make sense to group claims by tier for prizes.json

@@ -129,6 +129,7 @@ export default class DrawPrizes extends Command {
     // Write to Disk
     /* -------------------------------------------------- */
     // TODO: Verify schema:
+    // TODO: Also, it would prob make sense to group claims by tier for prizes.json
     // !verifyAgainstSchema(claims) && this.error("Prizes DataStructure is not valid against schema");
     writeToOutput(outDirWithSchema, "prizes", claimsWithPrizeAmounts);
     writePrizesToOutput(outDirWithSchema, claimsWithPrizeAmounts);
