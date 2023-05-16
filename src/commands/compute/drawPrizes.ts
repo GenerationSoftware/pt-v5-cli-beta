@@ -14,7 +14,11 @@ import { getProvider } from "../../lib/utils/getProvider";
 import { createOutputPath } from "../../lib/utils/createOutputPath";
 import { createExitCode } from "../../lib/utils/createExitCode";
 import { writeToOutput, writePrizesToOutput } from "../../lib/utils/writeOutput";
-import { sumPrizeAmounts } from "../../lib/utils/sumPrizeAmounts";
+import {
+  sumPrizeAmounts,
+  mapTierPrizeAmountsToString,
+  addTierPrizeAmountsToClaims,
+} from "../../lib/utils/prizeAmounts";
 // import { verifyAgainstSchema } from "../../lib/utils/verifyAgainstSchema";
 
 interface TiersContext {
@@ -87,9 +91,7 @@ export default class DrawPrizes extends Command {
     );
 
     const readProvider = getProvider(chainId);
-
     const prizePoolContract = getPrizePoolByAddress(Number(chainId), prizePool, readProvider);
-
     const drawId = await prizePoolContract?.getLastCompletedDrawId();
     this.log(`DrawID: #${drawId.toString()}`);
 
@@ -111,9 +113,8 @@ export default class DrawPrizes extends Command {
     }
     this.log(`${vaults.length.toString()} vaults.`);
 
-    const tiersRangeArray = prizePoolData.tiers.rangeArray;
-
     // Find out how much each tier won
+    const tiersRangeArray = prizePoolData.tiers.rangeArray;
     const tierPrizeAmounts = await getTierPrizeAmounts(readProvider, contracts, tiersRangeArray);
 
     /* -------------------------------------------------- */
@@ -122,17 +123,20 @@ export default class DrawPrizes extends Command {
     const claims = await getWinnersClaims(readProvider, contracts, vaults, tiersRangeArray);
     this.log(`${claims.length.toString()} prizes.`);
 
+    const claimsWithPrizeAmounts = addTierPrizeAmountsToClaims(claims, tierPrizeAmounts);
+
     /* -------------------------------------------------- */
     // Write to Disk
     /* -------------------------------------------------- */
     // TODO: Verify schema:
     // !verifyAgainstSchema(claims) && this.error("Prizes DataStructure is not valid against schema");
-    writeToOutput(outDirWithSchema, "prizes", claims);
-    writePrizesToOutput(outDirWithSchema, claims);
+    writeToOutput(outDirWithSchema, "prizes", claimsWithPrizeAmounts);
+    writePrizesToOutput(outDirWithSchema, claimsWithPrizeAmounts);
 
     const statusSuccess = updateStatusSuccess(DrawPrizes.statusLoading.createdAt, {
-      prizeLength: claims.length,
+      prizeLength: claimsWithPrizeAmounts.length,
       amountsTotal: sumPrizeAmounts(tierPrizeAmounts),
+      tierPrizeAmounts: mapTierPrizeAmountsToString(tierPrizeAmounts),
     });
     writeToOutput(outDirWithSchema, "status", statusSuccess);
 

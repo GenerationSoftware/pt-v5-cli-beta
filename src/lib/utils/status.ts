@@ -1,8 +1,11 @@
-import {Status, StatusError} from '../../types'
+import { Amounts } from '@pooltogether/v5-utils-js'
+
+import { Status, StatusError } from '../../types'
 
 export interface SuccessStats {
-    prizeLength: number;
-    amountsTotal: string;
+  prizeLength: number;
+  amountsTotal: string;
+  tierPrizeAmounts: any;
 }
 
 export function createStatus(): Status {
