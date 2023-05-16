@@ -2,17 +2,14 @@
   "compilerOptions": {
     "declaration": true,
     "importHelpers": false,
-    "module": "ES2020",
+    "module": "commonjs",
     "outDir": "dist",
     "rootDir": "src",
     "strict": true,
-    "target": "ES2020",
+    "target": "esnext",
     "esModuleInterop": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-  },
-  "ts-node": {
-    "esm": true
   },
   "include": [
     "src/**/*"

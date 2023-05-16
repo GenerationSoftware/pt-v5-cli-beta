@@ -19,19 +19,17 @@ npx @pooltogether/v5-cli help compute drawPrizes
 # ⌨️ CLI Installation
 
 <!-- usage -->
-
 ```sh-session
 $ npm install -g @pooltogether/v5-cli
 $ ptv5 COMMAND
 running command...
 $ ptv5 (--version)
-@pooltogether/v5-cli/0.0.1-beta.1 darwin-arm64 node-v18.16.0
+@pooltogether/v5-cli/0.0.1-beta.2 darwin-arm64 node-v18.16.0
 $ ptv5 --help [COMMAND]
 USAGE
   $ ptv5 COMMAND
 ...
 ```
-
 <!-- usagestop -->
 
 # Commands
