@@ -5,8 +5,8 @@ interface amountsAsString {
   [key: string]: string;
 };
 
-interface amountPerPrizeAsString {
-  [key: string]: string;
+interface claimTiers {
+  [key: string]: [];
 };
 
 interface ClaimWithAmount extends Claim {
@@ -31,28 +31,39 @@ export function mapTierPrizeAmountsToString(tierPrizeAmounts: Amounts) {
 };
 
 export function addTierPrizeAmountsToClaims(claims: Claim[], tierPrizeAmounts: Amounts): ClaimWithAmount[] {
-  const claimsByTier = groupByTier(claims)
+  const claimsByTier = groupByTier(claims, tierPrizeAmounts)
   const claimsWithAmounts:ClaimWithAmount[] = []
-  const tierAmountPerPrize:amountPerPrizeAsString = {}
+
+  const tierAmountPerPrize: amountsAsString = {};
+  for (const tier of Object.keys(tierPrizeAmounts)) {
+    tierAmountPerPrize[tier] = '0';
+  }
 
   for (const tier of Object.entries(tierPrizeAmounts)) {
     const [key, value] = tier
     const numberOfPrizes = claimsByTier[key].length
-    tierAmountPerPrize[key] = BigNumber.from(value).div(numberOfPrizes).toString()
+    if (numberOfPrizes > 0) {
+      tierAmountPerPrize[key] = BigNumber.from(value).div(numberOfPrizes).toString()
+    }
   }
 
   for (const claim of claims) {
-    const claimWithAmount = {...claim, amount: tierAmountPerPrize[claim.tier.toString()]}
+    const claimWithAmount = { ...claim, amount: tierAmountPerPrize[claim.tier.toString()] }
     claimsWithAmounts.push(claimWithAmount)
   }
 
   return claimsWithAmounts
 }
 
-const groupByTier = (claims: any) =>{
-  return claims.reduce(function (accumulator:any, value:any) {
-        accumulator[value.tier] = accumulator[value.tier] || [];
-        accumulator[value.tier].push(value);
-        return accumulator;
-    }, {});
+const groupByTier = (claims: any, tierPrizeAmounts: Amounts) =>{
+  const initialClaims: claimTiers = {};
+  for (const tier of Object.keys(tierPrizeAmounts)) {
+    initialClaims[tier] = [];
+  }
+
+  return claims.reduce(function (accumulator: any, value: any) {
+    accumulator[value.tier] = accumulator[value.tier] || [];
+    accumulator[value.tier].push(value);
+    return accumulator;
+  }, initialClaims);
 }
