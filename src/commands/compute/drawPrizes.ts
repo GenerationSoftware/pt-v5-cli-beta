@@ -2,7 +2,7 @@ import { ethers, Contract } from "ethers";
 import { Provider } from "@ethersproject/providers";
 import { Command, Flags } from "@oclif/core";
 import {
-  testnetContractsBlob as contracts,
+  downloadContractsBlob,
   getSubgraphVaults,
   getWinnersClaims,
   getTierPrizeAmounts,
@@ -68,7 +68,7 @@ export default class DrawPrizes extends Command {
 
     const readProvider = getProvider(chainId);
 
-    const prizePoolContract = getPrizePoolByAddress(Number(chainId), prizePool, readProvider);
+    const prizePoolContract = await getPrizePoolByAddress(Number(chainId), prizePool, readProvider);
 
     const drawId = await prizePoolContract?.getLastCompletedDrawId();
 
@@ -91,7 +91,7 @@ export default class DrawPrizes extends Command {
     );
 
     const readProvider = getProvider(chainId);
-    const prizePoolContract = getPrizePoolByAddress(Number(chainId), prizePool, readProvider);
+    const prizePoolContract = await getPrizePoolByAddress(Number(chainId), prizePool, readProvider);
     const drawId = await prizePoolContract?.getLastCompletedDrawId();
     this.log(`DrawID: #${drawId.toString()}`);
 
@@ -114,13 +114,16 @@ export default class DrawPrizes extends Command {
     this.log(`${vaults.length.toString()} vaults.`);
 
     // Find out how much each tier won
+    const contracts = await downloadContractsBlob(Number(chainId));
     const tiersRangeArray = prizePoolData.tiers.rangeArray;
     const tierPrizeAmounts = await getTierPrizeAmounts(readProvider, contracts, tiersRangeArray);
 
     /* -------------------------------------------------- */
     // Computation
     /* -------------------------------------------------- */
-    const claims = await getWinnersClaims(readProvider, contracts, vaults, tiersRangeArray);
+    const claims = await getWinnersClaims(readProvider, contracts, vaults, tiersRangeArray, {
+      filterAutoClaimDisabled: false,
+    });
     this.log(`${claims.length.toString()} prizes.`);
 
     const claimsWithPrizeAmounts = addTierPrizeAmountsToClaims(claims, tierPrizeAmounts);
@@ -165,13 +168,15 @@ const getPrizePoolData = async (
   return { drawId, tiers };
 };
 
-const getPrizePoolByAddress = (
+const getPrizePoolByAddress = async (
   chainId: number,
   prizePool: string,
   readProvider: Provider
-): Contract => {
+): Promise<Contract> => {
+  const contracts = await downloadContractsBlob(Number(chainId));
+
   const prizePoolContractBlob = contracts.contracts.find(
-    (contract) =>
+    (contract: any) =>
       contract.chainId === Number(chainId) &&
       contract.type === "PrizePool" &&
       contract.address.toLowerCase() === prizePool.toLowerCase()

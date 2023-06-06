@@ -1,5 +1,3 @@
-import { Amounts } from '@pooltogether/v5-utils-js'
-
 import { Status, StatusError } from '../../types'
 
 export interface SuccessStats {
