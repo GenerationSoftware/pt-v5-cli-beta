@@ -11,6 +11,7 @@ const providers: Providers = {
   10: new JsonRpcProvider(process.env.OPTIMISM_MAINNET_RPC_URL),
   // testnets
   5: new JsonRpcProvider(process.env.ETHEREUM_GOERLI_RPC_URL),
+  11155111: new JsonRpcProvider(process.env.ETHEREUM_SEPOLIA_RPC_URL),
   80001: new JsonRpcProvider(process.env.POLYGON_MUMBAI_RPC_URL),
   420: new JsonRpcProvider(process.env.OPTIMISM_GOERLI_RPC_URL),
   421613: new JsonRpcProvider(process.env.ARBITRUM_GOERLI_RPC_URL),
