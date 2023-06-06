@@ -85,6 +85,7 @@ export default class DrawPrizes extends Command {
   public async run(): Promise<void> {
     const { flags } = await this.parse(DrawPrizes);
     const { chainId, prizePool, outDir } = flags;
+
     this.log("");
     this.log(
       `Running "calculate:prizes" on chainId: ${chainId} for prizePool: ${prizePool.toLowerCase()} using latest drawID`
