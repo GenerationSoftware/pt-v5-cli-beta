@@ -253,7 +253,7 @@
   dependencies:
     "@ethersproject/logger" "^5.7.0"
 
-"@ethersproject/providers@5.7.2", "@ethersproject/providers@^5.0.10", "@ethersproject/providers@^5.5.3":
+"@ethersproject/providers@5.7.2", "@ethersproject/providers@^5.0.10", "@ethersproject/providers@^5.5.3", "@ethersproject/providers@^5.7.2":
   version "5.7.2"
   resolved "https://registry.yarnpkg.com/@ethersproject/providers/-/providers-5.7.2.tgz#f8b1a4f275d7ce58cf0a2eec222269a08beb18cb"
   integrity sha512-g34EWZ1WWAVgr4aptGlVBF8mhl3VWjv+8hoAnzStu8Ah22VHBsuGzP17eb6xDVRzw895G4W7vvx60lFFur/1Rg==
@@ -993,16 +993,17 @@
   resolved "https://registry.yarnpkg.com/@pooltogether/prize-api-schema/-/prize-api-schema-1.0.0-beta.1.tgz#173d36fa93e03dcaca638706c17f9d01db9e07d7"
   integrity sha512-6rSz5xQjBa+rqXjpU83cwBsOdeHdP3KAE+y4dMCDtMx/2qXzP9A20Py9tbTjUS8iivlGYO766jSFneDWOKrdqQ==
 
-"@pooltogether/v5-utils-js@^0.0.1-beta.17":
-  version "0.0.1-beta.17"
-  resolved "https://registry.yarnpkg.com/@pooltogether/v5-utils-js/-/v5-utils-js-0.0.1-beta.17.tgz#1f00a3d5dbcb925997443606859932e38acc8e15"
-  integrity sha512-RvvW4I91IAhG2nVU4rR6GfFw/s/Pr++Fi+UPYj99Np4J2lr8Alu7cKghSIKQsIAqCHL45ipJfjOGZ4Rsz3uBaw==
+"@pooltogether/v5-utils-js@^0.0.1-beta.19":
+  version "0.0.1-beta.19"
+  resolved "https://registry.yarnpkg.com/@pooltogether/v5-utils-js/-/v5-utils-js-0.0.1-beta.19.tgz#af9dcce049ea0271565c153beea515c3be635f9b"
+  integrity sha512-wLgAgCHbC0KR1ZJhvBrQMfi53rJ7zOHYPJvdO/9TcSVM49oSBo9WobiQ7toROfLhhIOMpyqKytH+KvkrOKXHHg==
   dependencies:
     "@pooltogether/contract-list-schema" "^0.1.4"
     "@types/lodash" "^4.14.195"
     axios "^1.4.0"
     ethereum-multicall "^2.17.0"
     ethers "^5.5.1"
+    ethers-multicall-provider "^3.0.3"
     graphql "^16.6.0"
     graphql-request "^6.0.0"
     lodash "^4.17.21"
@@ -2273,7 +2274,17 @@ ethereum-multicall@^2.17.0:
     "@ethersproject/providers" "^5.0.10"
     ethers "^5.0.15"
 
-ethers@^5.0.15, ethers@^5.5.1:
+ethers-multicall-provider@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/ethers-multicall-provider/-/ethers-multicall-provider-3.0.3.tgz#3d37d21713d62313f4d64891c16432cbc6b2455b"
+  integrity sha512-nnpZoGnbjYfMPBTBIEN6XbLXfYYX7kLhYVA6mmT0yREnsKTR+LcsGW34Ua0Gq9K7yusDVio1sNyjJKXx7LslMA==
+  dependencies:
+    "@ethersproject/abi" "^5.7.0"
+    "@ethersproject/providers" "^5.7.2"
+    ethers "^5.0.0"
+    lodash "^4.17.0"
+
+ethers@^5.0.0, ethers@^5.0.15, ethers@^5.5.1:
   version "5.7.2"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-5.7.2.tgz#3a7deeabbb8c030d4126b24f84e525466145872e"
   integrity sha512-wswUsmWo1aOK8rR7DIKiWSw9DbLWe6x98Jrn8wcTflTVvaXhAMaB5zGAXy0GYQEQp9iO1iSHWVyARQm11zUtyg==
@@ -2785,9 +2796,9 @@ graphql-request@^4.0.0:
     form-data "^3.0.0"
 
 graphql-request@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/graphql-request/-/graphql-request-6.0.0.tgz#9c8b6a0c341f289e049936d03cc9205300faae1c"
-  integrity sha512-2BmHTuglonjZvmNVw6ZzCfFlW/qkIPds0f+Qdi/Lvjsl3whJg2uvHmSvHnLWhUTEw6zcxPYAHiZoPvSVKOZ7Jw==
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/graphql-request/-/graphql-request-6.1.0.tgz#f4eb2107967af3c7a5907eb3131c671eac89be4f"
+  integrity sha512-p+XPfS4q7aIpKVcgmnZKhMNqhltk20hfXtkaIkTfjjmiKMJ5xrt5c743cL03y/K7y1rg3WrIC49xGiEQ4mxdNw==
   dependencies:
     "@graphql-typed-document-node/core" "^3.2.0"
     cross-fetch "^3.1.5"
@@ -3547,7 +3558,7 @@ locate-path@^6.0.0:
   dependencies:
     p-locate "^5.0.0"
 
-lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.21:
+lodash@^4.17.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.21:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==

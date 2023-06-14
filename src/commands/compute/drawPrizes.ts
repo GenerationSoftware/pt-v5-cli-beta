@@ -4,6 +4,7 @@ import { Command, Flags } from "@oclif/core";
 import {
   downloadContractsBlob,
   getSubgraphVaults,
+  populateSubgraphVaultAccounts,
   getWinnersClaims,
   getTierPrizeAmounts,
 } from "@pooltogether/v5-utils-js";
@@ -108,11 +109,14 @@ export default class DrawPrizes extends Command {
     const prizePoolData = await getPrizePoolData(prizePoolContract);
 
     // @ts-ignore
-    const vaults = await getSubgraphVaults(chainId);
+    let vaults = await getSubgraphVaults(chainId);
     if (vaults.length === 0) {
       throw new Error("No vaults found in subgraph");
     }
     this.log(`${vaults.length.toString()} vaults.`);
+
+    // Page through and concat all accounts for all vaults
+    vaults = await populateSubgraphVaultAccounts(Number(chainId), vaults);
 
     // Find out how much each tier won
     const contracts = await downloadContractsBlob(Number(chainId));
