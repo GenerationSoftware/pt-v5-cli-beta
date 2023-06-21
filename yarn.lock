@@ -988,25 +988,20 @@
   dependencies:
     evm-chains "^0.2.0"
 
-"@pooltogether/prize-api-schema@^1.0.0-beta.1":
-  version "1.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@pooltogether/prize-api-schema/-/prize-api-schema-1.0.0-beta.1.tgz#173d36fa93e03dcaca638706c17f9d01db9e07d7"
-  integrity sha512-6rSz5xQjBa+rqXjpU83cwBsOdeHdP3KAE+y4dMCDtMx/2qXzP9A20Py9tbTjUS8iivlGYO766jSFneDWOKrdqQ==
-
-"@pooltogether/v5-utils-js@^0.0.1-beta.19":
-  version "0.0.1-beta.19"
-  resolved "https://registry.yarnpkg.com/@pooltogether/v5-utils-js/-/v5-utils-js-0.0.1-beta.19.tgz#af9dcce049ea0271565c153beea515c3be635f9b"
-  integrity sha512-wLgAgCHbC0KR1ZJhvBrQMfi53rJ7zOHYPJvdO/9TcSVM49oSBo9WobiQ7toROfLhhIOMpyqKytH+KvkrOKXHHg==
+"@pooltogether/v5-utils-js@0.0.1-beta.23":
+  version "0.0.1-beta.23"
+  resolved "https://registry.yarnpkg.com/@pooltogether/v5-utils-js/-/v5-utils-js-0.0.1-beta.23.tgz#fdf7c3b7ef1fe904ece44c23e919ab0713e4af97"
+  integrity sha512-IhVA+nbuE3xw5Gc3F+/Tgd9VXMi5PjRlSc5IOgMgNfPNP9IlC8YbMDUOeCdftFxVVBO7U0G5Dkn2OI9VWD2H9w==
   dependencies:
     "@pooltogether/contract-list-schema" "^0.1.4"
     "@types/lodash" "^4.14.195"
-    axios "^1.4.0"
     ethereum-multicall "^2.17.0"
     ethers "^5.5.1"
     ethers-multicall-provider "^3.0.3"
     graphql "^16.6.0"
     graphql-request "^6.0.0"
     lodash "^4.17.21"
+    node-fetch "^2.6.11"
     tsc "^2.0.4"
     tsc-watch "^6.0.4"
     typescript "^5.0.4"
@@ -1433,15 +1428,6 @@ aws-sdk@^2.1231.0:
     util "^0.12.4"
     uuid "8.0.0"
     xml2js "0.5.0"
-
-axios@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.4.0.tgz#38a7bf1224cd308de271146038b551d725f0be1f"
-  integrity sha512-S4XCWMEmzvo64T9GfvQDOXgYRDJ/wsSZc7Jvdgx5u1sd0JwsuPLqb3SYmusag+edF6ziyMensPVqLTSc1PiSEA==
-  dependencies:
-    follow-redirects "^1.15.0"
-    form-data "^4.0.0"
-    proxy-from-env "^1.1.0"
 
 balanced-match@^1.0.0:
   version "1.0.2"
@@ -2284,7 +2270,7 @@ ethers-multicall-provider@^3.0.3:
     ethers "^5.0.0"
     lodash "^4.17.0"
 
-ethers@^5.0.0, ethers@^5.0.15, ethers@^5.5.1:
+ethers@^5.0.0, ethers@^5.0.15, ethers@^5.5.1, ethers@^5.7.2:
   version "5.7.2"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-5.7.2.tgz#3a7deeabbb8c030d4126b24f84e525466145872e"
   integrity sha512-wswUsmWo1aOK8rR7DIKiWSw9DbLWe6x98Jrn8wcTflTVvaXhAMaB5zGAXy0GYQEQp9iO1iSHWVyARQm11zUtyg==
@@ -2505,11 +2491,6 @@ flat@^5.0.2:
   resolved "https://registry.yarnpkg.com/flat/-/flat-5.0.2.tgz#8ca6fe332069ffa9d324c327198c598259ceb241"
   integrity sha512-b6suED+5/3rTpUBdG1gupIl8MPFCAMA0QXwmljLhvCUKcUvdE4gWky9zpuGCcXHOsz4J9wPGNWq6OKpmIzz3hQ==
 
-follow-redirects@^1.15.0:
-  version "1.15.2"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.2.tgz#b460864144ba63f2681096f274c4e57026da2c13"
-  integrity sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==
-
 for-each@^0.3.3:
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/for-each/-/for-each-0.3.3.tgz#69b447e88a0a5d32c3e7084f3f1710034b21376e"
@@ -2529,15 +2510,6 @@ form-data@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/form-data/-/form-data-3.0.1.tgz#ebd53791b78356a99af9a300d4282c4d5eb9755f"
   integrity sha512-RHkBKtLWUVwd7SqRIvCZMEvAMoGUp0XU+seQiZejj0COz3RI3hWP4sCv3gZWWLjJTd7rGwcsF5eKZGii0r/hbg==
-  dependencies:
-    asynckit "^0.4.0"
-    combined-stream "^1.0.8"
-    mime-types "^2.1.12"
-
-form-data@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/form-data/-/form-data-4.0.0.tgz#93919daeaf361ee529584b9b31664dc12c9fa452"
-  integrity sha512-ETEklSGi5t0QMZuiXoA/Q6vcnxcLQP5vdugSpuAyi6SVGi2clPPp+xgEhuMaHC+zGgn31Kd235W35f7Hykkaww==
   dependencies:
     asynckit "^0.4.0"
     combined-stream "^1.0.8"
@@ -2803,10 +2775,15 @@ graphql-request@^6.0.0:
     "@graphql-typed-document-node/core" "^3.2.0"
     cross-fetch "^3.1.5"
 
-graphql@^16.3.0, graphql@^16.6.0:
+graphql@^16.3.0:
   version "16.6.0"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.6.0.tgz#c2dcffa4649db149f6282af726c8c83f1c7c5fdb"
   integrity sha512-KPIBPDlW7NxrbT/eh4qPXz5FiFdL5UbaA0XUNz2Rp3Z3hqBSkbj0GVjwFDztsWVauZUWsbKHgMg++sk8UX0bkw==
+
+graphql@^16.6.0:
+  version "16.7.0"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.7.0.tgz#717051b8c183fcf8c3ad0a3668aeb5ffd1e9bc33"
+  integrity sha512-kdNG+ZGNf0E4dezSA2N9cRq8UdOMCcz9Wzh1dDSrCzGCz0nj6p8qlE+utY6iqr9y1sh3MZxUb7K794neZ2oT1w==
 
 grouped-queue@^2.0.0:
   version "2.0.0"
@@ -4025,7 +4002,7 @@ node-fetch@2.6.7:
   dependencies:
     whatwg-url "^5.0.0"
 
-node-fetch@^2.6.7:
+node-fetch@^2.6.11, node-fetch@^2.6.7:
   version "2.6.11"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.11.tgz#cde7fc71deef3131ef80a738919f999e6edfff25"
   integrity sha512-4I6pdBY1EthSqDmJkiNk3JIT8cswwR9nfeW/cPdUagJYEQG7R95WRH74wpz7ma8Gh/9dI9FP+OU+0E4FvtA55w==
@@ -4793,11 +4770,6 @@ propagate@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/propagate/-/propagate-2.0.1.tgz#40cdedab18085c792334e64f0ac17256d38f9a45"
   integrity sha512-vGrhOavPSTz4QVNuBNdcNXePNdNMaO1xj9yBeH1ScQPjk/rhg9sSlCXPhMkFuaNNW/syTvYqsnbIJxMBfRbbag==
-
-proxy-from-env@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/proxy-from-env/-/proxy-from-env-1.1.0.tgz#e102f16ca355424865755d2c9e8ea4f24d58c3e2"
-  integrity sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==
 
 ps-tree@^1.2.0:
   version "1.2.0"

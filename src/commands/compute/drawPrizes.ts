@@ -3,10 +3,9 @@ import { Provider } from "@ethersproject/providers";
 import { Command, Flags } from "@oclif/core";
 import {
   downloadContractsBlob,
-  getSubgraphVaults,
-  populateSubgraphVaultAccounts,
-  getWinnersClaims,
   getTierPrizeAmounts,
+  computeDrawWinners,
+  Claim,
 } from "@pooltogether/v5-utils-js";
 import * as core from "@actions/core";
 
@@ -20,7 +19,6 @@ import {
   mapTierPrizeAmountsToString,
   addTierPrizeAmountsToClaims,
 } from "../../lib/utils/prizeAmounts";
-// import { verifyAgainstSchema } from "../../lib/utils/verifyAgainstSchema";
 
 interface TiersContext {
   numberOfTiers: number;
@@ -104,31 +102,24 @@ export default class DrawPrizes extends Command {
     writeToOutput(outDirWithSchema, "status", DrawPrizes.statusLoading);
 
     /* -------------------------------------------------- */
-    // Data Fetching
+    // Data Fetching && Compute
     /* -------------------------------------------------- */
     const prizePoolData = await getPrizePoolData(prizePoolContract);
-
-    // @ts-ignore
-    let vaults = await getSubgraphVaults(chainId);
-    if (vaults.length === 0) {
-      throw new Error("No vaults found in subgraph");
-    }
-    this.log(`${vaults.length.toString()} vaults.`);
-
-    // Page through and concat all accounts for all vaults
-    vaults = await populateSubgraphVaultAccounts(Number(chainId), vaults);
 
     // Find out how much each tier won
     const contracts = await downloadContractsBlob(Number(chainId));
     const tiersRangeArray = prizePoolData.tiers.rangeArray;
     const tierPrizeAmounts = await getTierPrizeAmounts(readProvider, contracts, tiersRangeArray);
 
-    /* -------------------------------------------------- */
-    // Computation
-    /* -------------------------------------------------- */
-    const claims = await getWinnersClaims(readProvider, contracts, vaults, tiersRangeArray, {
-      filterAutoClaimDisabled: false,
-    });
+    const filterAutoClaimDisabled = false;
+    const claims: Claim[] = await computeDrawWinners(
+      readProvider,
+      contracts,
+      Number(chainId),
+      tiersRangeArray,
+      Number(drawId),
+      filterAutoClaimDisabled
+    );
     this.log(`${claims.length.toString()} prizes.`);
 
     const claimsWithPrizeAmounts = addTierPrizeAmountsToClaims(claims, tierPrizeAmounts);
@@ -136,9 +127,6 @@ export default class DrawPrizes extends Command {
     /* -------------------------------------------------- */
     // Write to Disk
     /* -------------------------------------------------- */
-    // TODO: Verify schema:
-    // TODO: Also, it would prob make sense to group claims by tier for prizes.json
-    // !verifyAgainstSchema(claims) && this.error("Prizes DataStructure is not valid against schema");
     writeToOutput(outDirWithSchema, "prizes", claimsWithPrizeAmounts);
     writePrizesToOutput(outDirWithSchema, claimsWithPrizeAmounts);
 
