@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { Amounts, Claim } from '@pooltogether/v5-utils-js'
+import { TierPrizeAmounts, Claim } from '@pooltogether/v5-utils-js'
 
 interface amountsAsString {
   [key: string]: string;
@@ -13,13 +13,13 @@ interface ClaimWithAmount extends Claim {
   amount: string
 }
 
-export function sumPrizeAmounts(tierPrizeAmounts: Amounts): string {
+export function sumPrizeAmounts(tierPrizeAmounts: TierPrizeAmounts): string {
   return Object.values(tierPrizeAmounts)
     .reduce((a, b) => a.add(b), BigNumber.from(0))
     .toString()
 }
 
-export function mapTierPrizeAmountsToString(tierPrizeAmounts: Amounts) {
+export function mapTierPrizeAmountsToString(tierPrizeAmounts: TierPrizeAmounts) {
   const obj: amountsAsString = {};
   
   for (const entry of Object.entries(tierPrizeAmounts)) {
@@ -30,7 +30,7 @@ export function mapTierPrizeAmountsToString(tierPrizeAmounts: Amounts) {
   return obj;
 };
 
-export function addTierPrizeAmountsToClaims(claims: Claim[], tierPrizeAmounts: Amounts): ClaimWithAmount[] {
+export function addTierPrizeAmountsToClaims(claims: Claim[], tierPrizeAmounts: TierPrizeAmounts): ClaimWithAmount[] {
   const claimsByTier = groupByTier(claims, tierPrizeAmounts)
   const claimsWithAmounts:ClaimWithAmount[] = []
 
@@ -55,7 +55,7 @@ export function addTierPrizeAmountsToClaims(claims: Claim[], tierPrizeAmounts: A
   return claimsWithAmounts
 }
 
-const groupByTier = (claims: any, tierPrizeAmounts: Amounts) =>{
+const groupByTier = (claims: any, tierPrizeAmounts: TierPrizeAmounts) =>{
   const initialClaims: claimTiers = {};
   for (const tier of Object.keys(tierPrizeAmounts)) {
     initialClaims[tier] = [];

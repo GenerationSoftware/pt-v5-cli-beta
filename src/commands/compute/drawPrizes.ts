@@ -1,4 +1,4 @@
-import { ethers, Contract } from "ethers";
+import { BigNumber, ethers, Contract } from "ethers";
 import { Provider } from "@ethersproject/providers";
 import { Command, Flags } from "@oclif/core";
 import {
@@ -108,15 +108,19 @@ export default class DrawPrizes extends Command {
 
     // Find out how much each tier won
     const contracts = await downloadContractsBlob(Number(chainId));
-    const tiersRangeArray = prizePoolData.tiers.rangeArray;
-    const tierPrizeAmounts = await getTierPrizeAmounts(readProvider, contracts, tiersRangeArray);
+    // const tierPrizeAmounts = await getTierPrizeAmounts(readProvider, contracts, tiersRangeArray);
+    const tierPrizeAmounts = {
+      "0": BigNumber.from(2),
+      "1": BigNumber.from(4),
+      "2": BigNumber.from(8),
+      "3": BigNumber.from(16),
+    };
 
     const filterAutoClaimDisabled = false;
     const claims: Claim[] = await computeDrawWinners(
       readProvider,
       contracts,
       Number(chainId),
-      tiersRangeArray,
       Number(drawId),
       filterAutoClaimDisabled
     );
@@ -155,6 +159,7 @@ const getPrizePoolData = async (
   const drawId = await prizePool.getLastCompletedDrawId();
 
   const numberOfTiers = await prizePool.numberOfTiers();
+  console.log("...");
   const rangeArray = Array.from({ length: numberOfTiers + 1 }, (value, index) => index);
   const tiers: TiersContext = { numberOfTiers, rangeArray };
 
