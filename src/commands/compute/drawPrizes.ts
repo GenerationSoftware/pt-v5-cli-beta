@@ -119,7 +119,6 @@ export default class DrawPrizes extends Command {
       readProvider,
       contracts,
       Number(chainId),
-      Number(drawId),
       filterAutoClaimDisabled
     );
     this.log(`${claims.length.toString()} prizes.`);
