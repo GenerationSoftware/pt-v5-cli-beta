@@ -104,8 +104,6 @@ export default class DrawPrizes extends Command {
     /* -------------------------------------------------- */
     // Data Fetching && Compute
     /* -------------------------------------------------- */
-    const prizePoolData = await getPrizePoolData(prizePoolContract);
-
     // Find out how much each tier won
     const contracts = await downloadContractsBlob(Number(chainId));
     // const tierPrizeAmounts = await getTierPrizeAmounts(readProvider, contracts, tiersRangeArray);
@@ -148,23 +146,6 @@ export default class DrawPrizes extends Command {
     core.setOutput("drawId", drawId.toString());
   }
 }
-
-/**
- * Gather information about the given prize pool's last drawId and tiers
- * @returns {Promise} Promise with drawId and tiers
- */
-const getPrizePoolData = async (
-  prizePool: Contract
-): Promise<{ drawId: number; tiers: TiersContext }> => {
-  const drawId = await prizePool.getLastCompletedDrawId();
-
-  const numberOfTiers = await prizePool.numberOfTiers();
-  console.log("...");
-  const rangeArray = Array.from({ length: numberOfTiers + 1 }, (value, index) => index);
-  const tiers: TiersContext = { numberOfTiers, rangeArray };
-
-  return { drawId, tiers };
-};
 
 const getPrizePoolByAddress = async (
   chainId: number,
