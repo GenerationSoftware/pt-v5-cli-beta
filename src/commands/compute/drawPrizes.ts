@@ -3,7 +3,7 @@ import { Provider } from "@ethersproject/providers";
 import { Command, Flags } from "@oclif/core";
 import {
   downloadContractsBlob,
-  getTierPrizeAmounts,
+  getPrizePoolInfo,
   computeDrawWinners,
   Claim,
 } from "@pooltogether/v5-utils-js";
@@ -18,6 +18,7 @@ import {
   sumPrizeAmounts,
   mapTierPrizeAmountsToString,
   addTierPrizeAmountsToClaims,
+  TierPrizeAmounts,
 } from "../../lib/utils/prizeAmounts";
 
 interface TiersContext {
@@ -106,13 +107,12 @@ export default class DrawPrizes extends Command {
     /* -------------------------------------------------- */
     // Find out how much each tier won
     const contracts = await downloadContractsBlob(Number(chainId));
-    // const tierPrizeAmounts = await getTierPrizeAmounts(readProvider, contracts, tiersRangeArray);
-    const tierPrizeAmounts = {
-      "0": BigNumber.from(2),
-      "1": BigNumber.from(4),
-      "2": BigNumber.from(8),
-      "3": BigNumber.from(16),
-    };
+    const prizePoolInfo = await getPrizePoolInfo(readProvider, contracts);
+
+    const tierPrizeAmounts: TierPrizeAmounts = {};
+    Object.entries(prizePoolInfo.tierPrizeData).forEach(
+      (tier) => (tierPrizeAmounts[tier[0]] = tier[1].amount)
+    );
 
     const filterAutoClaimDisabled = false;
     const claims: Claim[] = await computeDrawWinners(

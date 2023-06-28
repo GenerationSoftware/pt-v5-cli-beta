@@ -1,5 +1,9 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { TierPrizeAmounts, Claim } from '@pooltogether/v5-utils-js'
+import { Claim } from '@pooltogether/v5-utils-js'
+
+export interface TierPrizeAmounts {
+  [tier: string]: BigNumber;
+}
 
 interface amountsAsString {
   [key: string]: string;
