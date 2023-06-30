@@ -988,10 +988,10 @@
   dependencies:
     evm-chains "^0.2.0"
 
-"@pooltogether/v5-utils-js@0.0.1-beta.25":
-  version "0.0.1-beta.25"
-  resolved "https://registry.yarnpkg.com/@pooltogether/v5-utils-js/-/v5-utils-js-0.0.1-beta.25.tgz#8c24ea1166781a1426dd749905cd46d04e918d19"
-  integrity sha512-K5hsDr3YIhVikb5lG0ut/oHgp7nRJgFyksHA2M7DojK63xaInst704ewa5pP9LtIrj7LY5a6tegwu9Uyk1y7kg==
+"@pooltogether/v5-utils-js@0.0.1-beta.26":
+  version "0.0.1-beta.26"
+  resolved "https://registry.yarnpkg.com/@pooltogether/v5-utils-js/-/v5-utils-js-0.0.1-beta.26.tgz#b05f3ff23dbf984849e4e0ca4dc04c7cbaedcdd1"
+  integrity sha512-cWPzmY3ruqJkou9t3pbRvbfCRbCn5w8o94+CXPvhgREtV6fh6TqBID6fW7q/h/l467y6ngGeazwDuoXiXpHdgQ==
   dependencies:
     "@pooltogether/contract-list-schema" "^0.1.4"
     "@types/lodash" "^4.14.195"

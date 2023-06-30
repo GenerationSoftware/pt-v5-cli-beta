@@ -37,7 +37,7 @@
     "@oclif/core": "^2.8.5",
     "@oclif/plugin-help": "^5",
     "@oclif/plugin-plugins": "^3.0.1",
-    "@pooltogether/v5-utils-js": "0.0.1-beta.25",
+    "@pooltogether/v5-utils-js": "0.0.1-beta.26",
     "ajv": "^8.10.0",
     "ethers": "^5.7.2",
     "graphql": "^16.3.0",
