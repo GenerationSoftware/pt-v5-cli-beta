@@ -21,11 +21,6 @@ import {
   TierPrizeAmounts,
 } from "../../lib/utils/prizeAmounts";
 
-interface TiersContext {
-  numberOfTiers: number;
-  rangeArray: number[];
-}
-
 /**
  * @name DrawPrizes
  */
@@ -132,7 +127,8 @@ export default class DrawPrizes extends Command {
     writePrizesToOutput(outDirWithSchema, claimsWithPrizeAmounts);
 
     const statusSuccess = updateStatusSuccess(DrawPrizes.statusLoading.createdAt, {
-      prizeLength: claimsWithPrizeAmounts.length,
+      numberOfTiers: prizePoolInfo.numberOfTiers,
+      prizeLength: claims.length,
       amountsTotal: sumPrizeAmounts(tierPrizeAmounts),
       tierPrizeAmounts: mapTierPrizeAmountsToString(tierPrizeAmounts),
     });

@@ -1,6 +1,7 @@
 import { Status, StatusError } from '../../types'
 
 export interface SuccessStats {
+  numberOfTiers: number;
   prizeLength: number;
   amountsTotal: string;
   tierPrizeAmounts: any;
