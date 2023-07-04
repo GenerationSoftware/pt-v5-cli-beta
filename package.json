@@ -1,5 +1,5 @@
 {
-  "name": "@pooltogether/v5-cli",
+  "name": "@generationsoftware/pt-v5-cli",
   "description": "PoolTogether V5 Command Line Interface",
   "author": "PoolTogether Inc",
   "license": "GPL-3.0-only",
@@ -37,7 +37,7 @@
     "@oclif/core": "^2.8.5",
     "@oclif/plugin-help": "^5",
     "@oclif/plugin-plugins": "^3.0.1",
-    "@pooltogether/v5-utils-js": "0.0.1-beta.26",
+    "@generationsoftware/pt-v5-utils-js": "0.0.1-beta.27",
     "ajv": "^8.10.0",
     "ethers": "^5.7.2",
     "graphql": "^16.3.0",

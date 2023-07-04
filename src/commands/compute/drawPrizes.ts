@@ -6,7 +6,7 @@ import {
   getPrizePoolInfo,
   computeDrawWinners,
   Claim,
-} from "@pooltogether/v5-utils-js";
+} from "@generationsoftware/pt-v5-utils-js";
 import * as core from "@actions/core";
 
 import { createStatus, updateStatusFailure, updateStatusSuccess } from "../../lib/utils/status";

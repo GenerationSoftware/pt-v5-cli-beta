@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { Claim } from '@pooltogether/v5-utils-js'
+import { Claim } from '@generationsoftware/pt-v5-utils-js'
 
 export interface TierPrizeAmounts {
   [tier: string]: BigNumber;

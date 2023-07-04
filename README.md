@@ -8,28 +8,30 @@
 
 # PoolTogether V5 CLI
 
-The `@pooltogether/v5-cli` [node module package](https://www.npmjs.com/package/@pooltogether/v5-cli) is a NODE command line interface (CLI) to interact with the **PoolTogether V5 protocol**. The CLI uses the `v5-autotasks-library` modules to fetch and run calculations/computations for essential PoolTogether V5 tasks.
+The `@generationsoftware/pt-v5-cli` [node module package](https://www.npmjs.com/package/@generationsoftware/pt-v5-cli) is a NODE command line interface (CLI) to interact with the **PoolTogether V5 protocol**. The CLI uses the `v5-autotasks-library` modules to fetch and run calculations/computations for essential PoolTogether V5 tasks.
 
 Primary CLI Commands (help)
 
 ```sh
-npx @pooltogether/v5-cli help compute drawPrizes
+npx @generationsoftware/pt-v5-cli help compute drawPrizes
 ```
 
 # ⌨️ CLI Installation
 
 <!-- usage -->
+
 ```sh-session
-$ npm install -g @pooltogether/v5-cli
+$ npm install -g @generationsoftware/pt-v5-cli
 $ ptv5 COMMAND
 running command...
 $ ptv5 (--version)
-@pooltogether/v5-cli/0.0.1-beta.22 darwin-arm64 node-v18.16.0
+@generationsoftware/pt-v5-cli/0.0.1-beta.22 darwin-arm64 node-v18.16.0
 $ ptv5 --help [COMMAND]
 USAGE
   $ ptv5 COMMAND
 ...
 ```
+
 <!-- usagestop -->
 
 # Commands
