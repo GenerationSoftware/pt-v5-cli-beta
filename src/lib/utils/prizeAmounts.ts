@@ -35,7 +35,7 @@ export function mapTierPrizeAmountsToString(tierPrizeAmounts: TierPrizeAmounts) 
 };
 
 export function addTierPrizeAmountsToClaims(claims: Claim[], tierPrizeAmounts: TierPrizeAmounts): ClaimWithAmount[] {
-  const claimsByTier = groupByTier(claims, tierPrizeAmounts)
+  // const claimsByTier = groupByTier(claims, tierPrizeAmounts)
   const claimsWithAmounts:ClaimWithAmount[] = []
 
   const tierAmountPerPrize: amountsAsString = {};
@@ -43,16 +43,18 @@ export function addTierPrizeAmountsToClaims(claims: Claim[], tierPrizeAmounts: T
     tierAmountPerPrize[tier] = '0';
   }
 
-  // I don't believe we want to divide the amount since the getTierPrizeSize is the
-  // size of each prize, not the shared amount for the tier
-  //
-  // for (const tier of Object.entries(tierPrizeAmounts)) {
-    // const [key, value] = tier
+  for (const tier of Object.entries(tierPrizeAmounts)) {
+    const [key, value] = tier
+    tierAmountPerPrize[key] = BigNumber.from(value).toString()
+    
+    // I don't believe we want to divide the amount since the getTierPrizeSize is the
+    // size of each prize, not the shared amount for the tier
+    //
     // const numberOfPrizes = claimsByTier[key].length
     // if (numberOfPrizes > 0) {
     //   tierAmountPerPrize[key] = BigNumber.from(value).div(numberOfPrizes).toString()
     // }
-  // }
+  }
 
   for (const claim of claims) {
     const claimWithAmount = { ...claim, amount: tierAmountPerPrize[claim.tier.toString()] }
