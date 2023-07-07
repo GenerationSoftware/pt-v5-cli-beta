@@ -5,6 +5,8 @@ export interface SuccessStats {
   prizeLength: number;
   amountsTotal: string;
   tierPrizeAmounts: any;
+  tierAccrualDurationInDraws: any;
+  vaultPortions: any;
 }
 
 export function createStatus(): Status {

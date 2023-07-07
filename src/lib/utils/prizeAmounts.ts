@@ -1,3 +1,4 @@
+import { Contract } from 'ethers'
 import { BigNumber } from '@ethersproject/bignumber'
 import { Claim } from '@generationsoftware/pt-v5-utils-js'
 
@@ -15,6 +16,11 @@ interface claimTiers {
 
 interface ClaimWithAmount extends Claim {
   amount: string
+}
+
+interface ClaimWithAmountAndTwabs extends ClaimWithAmount {
+  userTwab: string
+  totalSupplyTwab: string
 }
 
 export function sumPrizeAmounts(tierPrizeAmounts: TierPrizeAmounts): string {
@@ -64,7 +70,7 @@ export function addTierPrizeAmountsToClaims(claims: Claim[], tierPrizeAmounts: T
   return claimsWithAmounts
 }
 
-const groupByTier = (claims: any, tierPrizeAmounts: TierPrizeAmounts) =>{
+const groupByTier = (claims: any, tierPrizeAmounts: TierPrizeAmounts) => {
   const initialClaims: claimTiers = {};
   for (const tier of Object.keys(tierPrizeAmounts)) {
     initialClaims[tier] = [];
@@ -75,4 +81,28 @@ const groupByTier = (claims: any, tierPrizeAmounts: TierPrizeAmounts) =>{
     accumulator[value.tier].push(value);
     return accumulator;
   }, initialClaims);
+}
+
+export async function addUserAndTotalSupplyTwabsToClaims(
+  claimsWithAmounts: ClaimWithAmount[],
+  tierAccrualDurationsInDraws: Record<string, BigNumber>,
+  prizePoolContract: Contract
+): Promise<ClaimWithAmountAndTwabs[]> {
+  const claimsWithAmountAndTwabs: ClaimWithAmountAndTwabs[] = []
+
+  for (const claim of claimsWithAmounts) {
+    const tierDrawDuration = tierAccrualDurationsInDraws[claim.tier.toString()]
+
+    const twabs = await prizePoolContract.getVaultUserBalanceAndTotalSupplyTwab(
+      claim.vault,
+      claim.winner,
+      tierDrawDuration
+    )
+
+    const claimWithAmountAndTwab = { ...claim, userTwab: twabs[0].toString(), totalSupplyTwab: twabs[1].toString() }
+    
+    claimsWithAmountAndTwabs.push(claimWithAmountAndTwab)
+  }
+
+  return claimsWithAmountAndTwabs
 }

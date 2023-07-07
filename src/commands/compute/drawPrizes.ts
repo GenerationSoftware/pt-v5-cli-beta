@@ -6,6 +6,8 @@ import {
   getPrizePoolInfo,
   computeDrawWinners,
   Claim,
+  PrizePoolInfo,
+  getSubgraphVaults,
 } from "@generationsoftware/pt-v5-utils-js";
 import * as core from "@actions/core";
 
@@ -18,6 +20,7 @@ import {
   sumPrizeAmounts,
   mapTierPrizeAmountsToString,
   addTierPrizeAmountsToClaims,
+  addUserAndTotalSupplyTwabsToClaims,
   TierPrizeAmounts,
 } from "../../lib/utils/prizeAmounts";
 
@@ -120,17 +123,30 @@ export default class DrawPrizes extends Command {
 
     const claimsWithPrizeAmounts = addTierPrizeAmountsToClaims(claims, tierPrizeAmounts);
 
+    // NEW
+    const tierAccrualDurationsInDraws: Record<string, BigNumber> =
+      await getTierAccrualDurationsInDraws(prizePoolContract, prizePoolInfo.tiersRangeArray);
+    const claimsWithUserAndTotalSupplyTwab = await addUserAndTotalSupplyTwabsToClaims(
+      claimsWithPrizeAmounts,
+      tierAccrualDurationsInDraws,
+      prizePoolContract
+    );
+
     /* -------------------------------------------------- */
     // Write to Disk
     /* -------------------------------------------------- */
-    writeToOutput(outDirWithSchema, "prizes", claimsWithPrizeAmounts);
-    writePrizesToOutput(outDirWithSchema, claimsWithPrizeAmounts);
+    writeToOutput(outDirWithSchema, "prizes", claimsWithUserAndTotalSupplyTwab);
+    writePrizesToOutput(outDirWithSchema, claimsWithUserAndTotalSupplyTwab);
 
     const statusSuccess = updateStatusSuccess(DrawPrizes.statusLoading.createdAt, {
       numberOfTiers: prizePoolInfo.numberOfTiers,
       prizeLength: claims.length,
       amountsTotal: sumPrizeAmounts(tierPrizeAmounts),
       tierPrizeAmounts: mapTierPrizeAmountsToString(tierPrizeAmounts),
+      tierAccrualDurationInDraws: mapBigNumbersToStrings(tierAccrualDurationsInDraws),
+      vaultPortions: mapBigNumbersToStrings(
+        await getVaultPortions(Number(chainId), prizePoolContract, prizePoolInfo)
+      ),
     });
     writeToOutput(outDirWithSchema, "status", statusSuccess);
 
@@ -167,4 +183,52 @@ const getPrizePoolByAddress = async (
     prizePoolContractBlob?.abi,
     readProvider
   );
+};
+
+export function mapBigNumbersToStrings(bigNumbers: Record<string, BigNumber>) {
+  const obj: Record<string, string> = {};
+
+  for (const entry of Object.entries(bigNumbers)) {
+    const [key, value] = entry;
+    obj[key] = BigNumber.from(value).toString();
+  }
+
+  return obj;
+}
+
+const getTierAccrualDurationsInDraws = async (
+  prizePoolContract: Contract,
+  tiers: number[]
+): Promise<Record<string, BigNumber>> => {
+  const tierAccrualDurations: Record<string, BigNumber> = {};
+  for (let tier of tiers) {
+    tierAccrualDurations[tier] = await prizePoolContract.getTierAccrualDurationInDraws(tier);
+  }
+  return tierAccrualDurations;
+};
+
+const getVaultPortions = async (
+  chainId: number,
+  prizePoolContract: Contract,
+  prizePoolInfo: PrizePoolInfo
+) => {
+  const vaultPortions: Record<string, BigNumber> = {};
+
+  const startDrawId = prizePoolInfo.drawId;
+  const endDrawId = startDrawId + 1;
+
+  let vaults = await getSubgraphVaults(chainId);
+  if (vaults.length === 0) {
+    throw new Error("Claimer: No vaults found in subgraph");
+  }
+
+  for (let vault of vaults) {
+    vaultPortions[vault.id] = await prizePoolContract.getVaultPortion(
+      vault.id,
+      startDrawId,
+      endDrawId
+    );
+  }
+
+  return vaultPortions;
 };
