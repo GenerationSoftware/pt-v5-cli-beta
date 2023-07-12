@@ -23,6 +23,10 @@ interface ClaimWithAmountAndTwabs extends ClaimWithAmount {
   totalSupplyTwab: string
 }
 
+interface ClaimExtended extends ClaimWithAmountAndTwabs {
+  isTimeRangeSafe: any
+}
+
 export function sumPrizeAmounts(tierPrizeAmounts: TierPrizeAmounts): string {
   return Object.values(tierPrizeAmounts)
     .reduce((a, b) => a.add(b), BigNumber.from(0))
@@ -106,3 +110,52 @@ export async function addUserAndTotalSupplyTwabsToClaims(
 
   return claimsWithAmountAndTwabs
 }
+
+export async function addIsTimeRangeSafeToClaims(
+  claims: ClaimWithAmountAndTwabs[],
+  drawStartTimestamp:number,
+  drawEndTimestamp:number,
+  twabControllerContract: Contract
+): Promise<ClaimExtended[]> {
+  const claimsExtended: ClaimExtended[] = []
+
+  for (const claim of claims) {
+    const { vault, winner } = claim
+    const isTimeRangeSafe = await getIsTimeRangeSafe(
+      twabControllerContract,
+      vault,
+      winner,
+      drawStartTimestamp,
+      drawEndTimestamp
+    )
+
+    const claimExtended = { ...claim, isTimeRangeSafe }
+    
+    claimsExtended.push(claimExtended)
+  }
+
+  return claimsExtended
+}
+
+const getIsTimeRangeSafe = async (
+  twabControllerContract: Contract,
+  vault: string,
+  user: string,
+  drawStartTimestamp: number,
+  drawEndTimestamp: number
+) => {
+  const isTimeRangeSafe = await twabControllerContract.isTimeRangeSafe(
+    vault,
+    user,
+    Number(drawStartTimestamp),
+    Number(drawEndTimestamp)
+  );
+  const isTimeRangeSafeStartTimePlusOne = await twabControllerContract.isTimeRangeSafe(
+    vault,
+    user,
+    Number(drawStartTimestamp) + 1,
+    Number(drawEndTimestamp)
+  );
+
+  return { isTimeRangeSafe, isTimeRangeSafeStartTimePlusOne };
+};

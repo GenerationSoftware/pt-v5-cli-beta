@@ -21,6 +21,7 @@ import {
   mapTierPrizeAmountsToString,
   addTierPrizeAmountsToClaims,
   addUserAndTotalSupplyTwabsToClaims,
+  addIsTimeRangeSafeToClaims,
   TierPrizeAmounts,
 } from "../../lib/utils/prizeAmounts";
 
@@ -132,11 +133,29 @@ export default class DrawPrizes extends Command {
       prizePoolContract
     );
 
+    // NEW 2
+    const drawStartTimestamp = await prizePoolContract?.lastCompletedDrawStartedAt();
+    this.log(`drawStartTimestamp: ${drawStartTimestamp.toString()}`);
+    const drawEndTimestamp = await prizePoolContract?.lastCompletedDrawEndedAt();
+    this.log(`drawEndTimestamp: ${drawEndTimestamp.toString()}`);
+
+    const twabControllerContract = await getTwabControllerByAddress(
+      Number(chainId),
+      await prizePoolContract?.twabController(),
+      readProvider
+    );
+    const claimsExtended = await addIsTimeRangeSafeToClaims(
+      claimsWithUserAndTotalSupplyTwab,
+      drawStartTimestamp,
+      drawEndTimestamp,
+      twabControllerContract
+    );
+
     /* -------------------------------------------------- */
     // Write to Disk
     /* -------------------------------------------------- */
-    writeToOutput(outDirWithSchema, "prizes", claimsWithUserAndTotalSupplyTwab);
-    writePrizesToOutput(outDirWithSchema, claimsWithUserAndTotalSupplyTwab);
+    writeToOutput(outDirWithSchema, "prizes", claimsExtended);
+    writePrizesToOutput(outDirWithSchema, claimsExtended);
 
     const statusSuccess = updateStatusSuccess(DrawPrizes.statusLoading.createdAt, {
       numberOfTiers: prizePoolInfo.numberOfTiers,
@@ -181,6 +200,33 @@ const getPrizePoolByAddress = async (
   return new ethers.Contract(
     prizePoolContractBlob?.address,
     prizePoolContractBlob?.abi,
+    readProvider
+  );
+};
+
+const getTwabControllerByAddress = async (
+  chainId: number,
+  twabController: string,
+  readProvider: Provider
+): Promise<Contract> => {
+  const contracts = await downloadContractsBlob(Number(chainId));
+
+  const twabControllerContractBlob = contracts.contracts.find(
+    (contract: any) =>
+      contract.chainId === Number(chainId) &&
+      contract.type === "TwabController" &&
+      contract.address.toLowerCase() === twabController.toLowerCase()
+  );
+
+  if (!twabControllerContractBlob) {
+    throw new Error(
+      `Multiple Contracts Unavailable: ${twabController} on chainId: ${chainId} not found.`
+    );
+  }
+
+  return new ethers.Contract(
+    twabControllerContractBlob?.address,
+    twabControllerContractBlob?.abi,
     readProvider
   );
 };
