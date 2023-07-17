@@ -113,13 +113,7 @@ export default class DrawPrizes extends Command {
       (tier) => (tierPrizeAmounts[tier[0]] = tier[1].amount)
     );
 
-    const filterAutoClaimDisabled = false;
-    const claims: Claim[] = await computeDrawWinners(
-      readProvider,
-      contracts,
-      Number(chainId),
-      filterAutoClaimDisabled
-    );
+    const claims: Claim[] = await computeDrawWinners(readProvider, contracts, Number(chainId));
     this.log(`${claims.length.toString()} prizes.`);
 
     const claimsWithPrizeAmounts = addTierPrizeAmountsToClaims(claims, tierPrizeAmounts);
@@ -135,9 +129,9 @@ export default class DrawPrizes extends Command {
 
     // NEW 2
     const drawStartTimestamp = await prizePoolContract?.lastCompletedDrawStartedAt();
-    this.log(`drawStartTimestamp: ${drawStartTimestamp.toString()}`);
+    // this.log(`drawStartTimestamp: ${drawStartTimestamp.toString()}`);
     const drawEndTimestamp = await prizePoolContract?.lastCompletedDrawEndedAt();
-    this.log(`drawEndTimestamp: ${drawEndTimestamp.toString()}`);
+    // this.log(`drawEndTimestamp: ${drawEndTimestamp.toString()}`);
 
     const twabControllerContract = await getTwabControllerByAddress(
       Number(chainId),
