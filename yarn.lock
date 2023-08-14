@@ -253,7 +253,7 @@
   dependencies:
     "@ethersproject/logger" "^5.7.0"
 
-"@ethersproject/providers@5.7.2", "@ethersproject/providers@^5.0.10", "@ethersproject/providers@^5.5.3", "@ethersproject/providers@^5.7.2":
+"@ethersproject/providers@5.7.2", "@ethersproject/providers@^5.5.3", "@ethersproject/providers@^5.7.2":
   version "5.7.2"
   resolved "https://registry.yarnpkg.com/@ethersproject/providers/-/providers-5.7.2.tgz#f8b1a4f275d7ce58cf0a2eec222269a08beb18cb"
   integrity sha512-g34EWZ1WWAVgr4aptGlVBF8mhl3VWjv+8hoAnzStu8Ah22VHBsuGzP17eb6xDVRzw895G4W7vvx60lFFur/1Rg==
@@ -409,10 +409,10 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
   integrity sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
 
-"@generationsoftware/pt-v5-utils-js@0.0.1-beta.33":
-  version "0.0.1-beta.33"
-  resolved "https://registry.yarnpkg.com/@generationsoftware/pt-v5-utils-js/-/pt-v5-utils-js-0.0.1-beta.33.tgz#16c5a5389f014b41552410aba09f3cb2de9e5294"
-  integrity sha512-CIxvTtrQPTKhNyWUG5F8EJwqaVRNmqD4Hd+cCbABal4G+DksANj2LFDHp4ZEIP4xYBTX+ND/NNU/gTUosISIxw==
+"@generationsoftware/pt-v5-utils-js@0.0.1-beta.34":
+  version "0.0.1-beta.34"
+  resolved "https://registry.yarnpkg.com/@generationsoftware/pt-v5-utils-js/-/pt-v5-utils-js-0.0.1-beta.34.tgz#d94978bfadcda43b1f20848d6fa3a5ddce6e96cb"
+  integrity sha512-O0CWTj20l3H608wjYSaWZA0qacXCPLExT/kpjbpVdziEMFGwQsndjF8MSJsazyzYUsM7HolTmjhnH3IZnNqp+Q==
   dependencies:
     "@pooltogether/contract-list-schema" "^0.1.4"
     "@types/lodash" "^4.14.195"
@@ -1005,22 +1005,6 @@
   dependencies:
     evm-chains "^0.2.0"
 
-"@pooltogether/v5-utils-js@file:.yalc/@pooltogether/v5-utils-js":
-  version "0.0.1-beta.26"
-  dependencies:
-    "@pooltogether/contract-list-schema" "^0.1.4"
-    "@types/lodash" "^4.14.195"
-    ethereum-multicall "^2.17.0"
-    ethers "^5.5.1"
-    ethers-multicall-provider "^3.0.3"
-    graphql "^16.6.0"
-    graphql-request "^6.0.0"
-    lodash "^4.17.21"
-    node-fetch "^2.6.11"
-    tsc "^2.0.4"
-    tsc-watch "^6.0.4"
-    typescript "^5.0.4"
-
 "@sigstore/protobuf-specs@^0.1.0":
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/@sigstore/protobuf-specs/-/protobuf-specs-0.1.0.tgz#957cb64ea2f5ce527cc9cf02a096baeb0d2b99b4"
@@ -1126,9 +1110,9 @@
   integrity sha512-r22s9tAS7imvBt2lyHC9B8AGwWnXaYb1tY09oyLkXDs4vArpYJzw09nj8MLx5VfciBPGIb+ZwG0ssYnEPJxn/g==
 
 "@types/lodash@^4.14.195":
-  version "4.14.195"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.195.tgz#bafc975b252eb6cea78882ce8a7b6bf22a6de632"
-  integrity sha512-Hwx9EUgdwf2GLarOjQp5ZH8ZmblzcbTBC2wtQWNKARBSxM9ezRIAUpeDTgoQRAFB0+8CNWXVA9+MaSOzOF3nPg==
+  version "4.14.197"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.197.tgz#e95c5ddcc814ec3e84c891910a01e0c8a378c54b"
+  integrity sha512-BMVOiWs0uNxHVlHBgzTIqJYmj+PgCo4euloGF+5m4okL3rEYzM2EEv78mw8zWSMM57dM7kVIgJ2QDvwHSoCI5g==
 
 "@types/minimatch@^3.0.3":
   version "3.0.5"
@@ -2267,25 +2251,17 @@ esprima@^4.0.0, esprima@~4.0.0:
   resolved "https://registry.yarnpkg.com/esprima/-/esprima-4.0.1.tgz#13b04cdb3e6c5d19df91ab6987a8695619b0aa71"
   integrity sha512-eGuFFw7Upda+g4p+QHvnW0RyTX/SVeJBDM/gCtMARO0cLuT2HcEKnTPvhjV6aGeqrCB/sbNop0Kszm0jsaWU4A==
 
-ethereum-multicall@^2.17.0:
-  version "2.19.0"
-  resolved "https://registry.yarnpkg.com/ethereum-multicall/-/ethereum-multicall-2.19.0.tgz#28462bf48792bf7bb0b2db1ca546f439b2adab96"
-  integrity sha512-ECMxdf1ffxBWTCLeAzEGGWUYNdlNq4zXPj/ZPXdaixbx/qZ/gw4ongwpuR5UGy6D5epWDftvFvIAEzmkwGZ1lQ==
-  dependencies:
-    "@ethersproject/providers" "^5.0.10"
-    ethers "^5.0.15"
-
 ethers-multicall-provider@^3.0.3:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/ethers-multicall-provider/-/ethers-multicall-provider-3.0.4.tgz#68826e01a613bdc99531257027488c426f43ee4c"
-  integrity sha512-jTVpi7o7Ugv/wuSKjuUHLnNO+NA0Z4r0uOYlQ0mzvNKzh79bNU0FMvgnFLtTYPRQflIe70TTTzh9fv81bzboHw==
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/ethers-multicall-provider/-/ethers-multicall-provider-3.1.1.tgz#aac9f37a27960d2df46a819a9bf31c03a6143354"
+  integrity sha512-NQ13RLYoB/q0Ussjkrh2u4ZQr0JLNEzga96YKCfhlzZukQJwOdZf7GkPO4sB3hjzjQMeTS0A+H60bZTd/4eHsQ==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/providers" "^5.7.2"
     ethers "^5.0.0"
     lodash "^4.17.0"
 
-ethers@^5.0.0, ethers@^5.0.15, ethers@^5.5.1, ethers@^5.7.2:
+ethers@^5.0.0, ethers@^5.5.1, ethers@^5.7.2:
   version "5.7.2"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-5.7.2.tgz#3a7deeabbb8c030d4126b24f84e525466145872e"
   integrity sha512-wswUsmWo1aOK8rR7DIKiWSw9DbLWe6x98Jrn8wcTflTVvaXhAMaB5zGAXy0GYQEQp9iO1iSHWVyARQm11zUtyg==
@@ -2796,9 +2772,9 @@ graphql@^16.3.0:
   integrity sha512-KPIBPDlW7NxrbT/eh4qPXz5FiFdL5UbaA0XUNz2Rp3Z3hqBSkbj0GVjwFDztsWVauZUWsbKHgMg++sk8UX0bkw==
 
 graphql@^16.6.0:
-  version "16.7.1"
-  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.7.1.tgz#11475b74a7bff2aefd4691df52a0eca0abd9b642"
-  integrity sha512-DRYR9tf+UGU0KOsMcKAlXeFfX89UiiIZ0dRU3mR0yJfu6OjZqUcp68NnFLnqQU5RexygFoDy1EW+ccOYcPfmHg==
+  version "16.8.0"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.8.0.tgz#374478b7f27b2dc6153c8f42c1b80157f79d79d4"
+  integrity sha512-0oKGaR+y3qcS5mCu1vb7KG+a89vjn06C7Ihq/dDl3jA+A8B3TKomvi3CiEcVLJQGalbu8F52LxkOym7U5sSfbg==
 
 grouped-queue@^2.0.0:
   version "2.0.0"
