@@ -69,7 +69,7 @@ export default class DrawPrizes extends Command {
 
     const prizePoolContract = await getPrizePoolByAddress(Number(chainId), prizePool, readProvider);
 
-    const drawId = await prizePoolContract?.getLastCompletedDrawId();
+    const drawId = await prizePoolContract?.getLastClosedDrawId();
 
     this.warn("Failed to calculate Draw Prizes (" + error + ")");
     const statusFailure = updateStatusFailure(DrawPrizes.statusLoading.createdAt, error);
@@ -92,7 +92,7 @@ export default class DrawPrizes extends Command {
 
     const readProvider = getProvider(chainId);
     const prizePoolContract = await getPrizePoolByAddress(Number(chainId), prizePool, readProvider);
-    const drawId = await prizePoolContract?.getLastCompletedDrawId();
+    const drawId = await prizePoolContract?.getLastClosedDrawId();
     this.log(`DrawID: #${drawId.toString()}`);
 
     /* -------------------------------------------------- */
@@ -128,9 +128,9 @@ export default class DrawPrizes extends Command {
     );
 
     // NEW 2
-    const drawStartTimestamp = await prizePoolContract?.lastCompletedDrawStartedAt();
+    const drawStartTimestamp = await prizePoolContract?.lastClosedDrawStartedAt();
     // this.log(`drawStartTimestamp: ${drawStartTimestamp.toString()}`);
-    const drawEndTimestamp = await prizePoolContract?.lastCompletedDrawEndedAt();
+    const drawEndTimestamp = await prizePoolContract?.lastClosedDrawEndedAt();
     // this.log(`drawEndTimestamp: ${drawEndTimestamp.toString()}`);
 
     const twabControllerContract = await getTwabControllerByAddress(
