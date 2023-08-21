@@ -4,10 +4,12 @@ import { Command, Flags } from "@oclif/core";
 import {
   downloadContractsBlob,
   getPrizePoolInfo,
-  computeDrawWinners,
   Claim,
   PrizePoolInfo,
   getSubgraphVaults,
+  populateSubgraphVaultAccounts,
+  getWinnersClaims,
+  flagClaimedRpc,
 } from "@generationsoftware/pt-v5-utils-js";
 import * as core from "@actions/core";
 
@@ -113,14 +115,46 @@ export default class DrawPrizes extends Command {
       (tier) => (tierPrizeAmounts[tier[0]] = tier[1].amount)
     );
 
-    const claims: Claim[] = await computeDrawWinners(readProvider, contracts, Number(chainId));
+    // #2. Collect all vaults
+    this.log(`getSubgraphVaults`);
+    let vaults = await getSubgraphVaults(Number(chainId));
+    if (vaults.length === 0) {
+      throw new Error("Claimer: No vaults found in subgraph");
+    }
+
+    // #3. Page through and concat all accounts for all vaults
+    this.log(`populateSubgraphVaultAccounts`);
+    vaults = await populateSubgraphVaultAccounts(Number(chainId), vaults);
+    // console.log("vaults");
+    // console.log(vaults);
+
+    // #4. Determine winners for last draw
+    let claims: Claim[] = await getWinnersClaims(readProvider, prizePoolInfo, contracts, vaults);
+
+    // #5. Cross-reference prizes claimed subgraph to flag if a claim has been claimed or not
+    claims = await flagClaimedRpc(readProvider, contracts, claims);
+
+    // This is a handy one-liner for the above but doesn't allow us to get the # of depositors to stash in the json:
+    // const claims: Claim[] = await computeDrawWinners(readProvider, contracts, Number(chainId));
+
+    this.log(``);
     this.log(`${claims.length.toString()} prizes.`);
+
+    const numAccounts = vaults.reduce(
+      (accumulator, vault) => vault.accounts.length + accumulator,
+      0
+    );
+    this.log(`${numAccounts} accounts deposited across ${vaults.length} vaults.`);
 
     const claimsWithPrizeAmounts = addTierPrizeAmountsToClaims(claims, tierPrizeAmounts);
 
     // NEW
+    this.log(``);
+    this.log(`getTierAccrualDurationsInDraws`);
     const tierAccrualDurationsInDraws: Record<string, BigNumber> =
       await getTierAccrualDurationsInDraws(prizePoolContract, prizePoolInfo.tiersRangeArray);
+
+    this.log(`addUserAndTotalSupplyTwabsToClaims`);
     const claimsWithUserAndTotalSupplyTwab = await addUserAndTotalSupplyTwabsToClaims(
       claimsWithPrizeAmounts,
       tierAccrualDurationsInDraws,
@@ -138,6 +172,7 @@ export default class DrawPrizes extends Command {
       await prizePoolContract?.twabController(),
       readProvider
     );
+    this.log(`addIsTimeRangeSafeToClaims`);
     const claimsExtended = await addIsTimeRangeSafeToClaims(
       claimsWithUserAndTotalSupplyTwab,
       drawStartTimestamp,
@@ -148,12 +183,16 @@ export default class DrawPrizes extends Command {
     /* -------------------------------------------------- */
     // Write to Disk
     /* -------------------------------------------------- */
+    this.log(`writeToOutput prizes`);
     writeToOutput(outDirWithSchema, "prizes", claimsExtended);
     writePrizesToOutput(outDirWithSchema, claimsExtended);
 
+    this.log(`updateStatusSuccess`);
     const statusSuccess = updateStatusSuccess(DrawPrizes.statusLoading.createdAt, {
-      numberOfTiers: prizePoolInfo.numberOfTiers,
-      prizeLength: claims.length,
+      numVaults: vaults.length,
+      numTiers: prizePoolInfo.numberOfTiers,
+      numAccounts,
+      numPrizes: claims.length,
       amountsTotal: sumPrizeAmounts(tierPrizeAmounts),
       tierPrizeAmounts: mapTierPrizeAmountsToString(tierPrizeAmounts),
       tierAccrualDurationInDraws: mapBigNumbersToStrings(tierAccrualDurationsInDraws),

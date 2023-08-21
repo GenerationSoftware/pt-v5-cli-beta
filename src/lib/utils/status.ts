@@ -1,8 +1,10 @@
 import { Status, StatusError } from '../../types'
 
 export interface SuccessStats {
-  numberOfTiers: number;
-  prizeLength: number;
+  numVaults: number;
+  numTiers: number;
+  numAccounts: number;
+  numPrizes: number;
   amountsTotal: string;
   tierPrizeAmounts: any;
   tierAccrualDurationInDraws: any;
@@ -22,7 +24,7 @@ export function updateStatusSuccess(createdAt: number, meta: SuccessStats): Stat
     status: 'SUCCESS',
     createdAt: createdAt,
     updatedAt: now,
-    runtime: now - createdAt,
+    runtime: Math.ceil((now - createdAt)/1000),
     meta: meta,
   }
 }
@@ -33,7 +35,7 @@ export function updateStatusFailure(createdAt: number, error: StatusError): Stat
     status: 'FAILURE',
     createdAt: createdAt,
     updatedAt: now,
-    runtime: now - createdAt,
+    runtime: Math.ceil((now - createdAt)/1000),
     error: error,
   }
 }
