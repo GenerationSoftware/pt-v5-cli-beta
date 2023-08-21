@@ -19,6 +19,7 @@ npx @generationsoftware/pt-v5-cli help compute drawPrizes
 # ⌨️ CLI Installation
 
 <!-- usage -->
+
 ```sh-session
 $ npm install -g @generationsoftware/pt-v5-cli
 $ ptv5 COMMAND
@@ -30,6 +31,7 @@ USAGE
   $ ptv5 COMMAND
 ...
 ```
+
 <!-- usagestop -->
 
 # Commands
@@ -115,29 +117,6 @@ DESCRIPTION
 ```
 
 ## Development
-
-Prior to publishing the CLI on npm, as this uses ESM after you run `npm install` (or `yarn install`) you will need to modify your `./node_modules/.bin/oclif` and `./node_modules/.bin/oclif2` symlinks. You can use the following commands to do this:
-
-```sh
-cd node_modules/.bin &&
-  rm oclif &&
-  rm oclif2 &&
-  ln -nfs ../oclif/bin/run.js oclif &&
-  ln -nfs ../oclif/bin/run.js oclif2 &&
-  cd ../oclif/bin &&
-  mv dev dev.js &&
-  mv run run.js
-```
-
-Also replace the contents of node_modules/oclif/bin/run.js with the following:
-
-```js
-#!/usr/bin/env node --loader ts-node/esm --experimental-specifier-resolution=node
-
-const oclif = require("@oclif/core");
-
-oclif.run().then(require("@oclif/core/flush")).catch(require("@oclif/core/handle"));
-```
 
 ### Using the tool in dev
 
