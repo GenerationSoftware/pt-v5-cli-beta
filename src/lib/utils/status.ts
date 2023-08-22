@@ -3,8 +3,10 @@ import { Status, StatusError } from '../../types'
 export interface SuccessStats {
   numVaults: number;
   numTiers: number;
+  numPrizeIndices: number;
   numAccounts: number;
   numPrizes: number;
+  prizePoolReserve: string;
   amountsTotal: string;
   tierPrizeAmounts: any;
   tierAccrualDurationInDraws: any;

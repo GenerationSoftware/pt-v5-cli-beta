@@ -190,9 +190,11 @@ export default class DrawPrizes extends Command {
     this.log(`updateStatusSuccess`);
     const statusSuccess = updateStatusSuccess(DrawPrizes.statusLoading.createdAt, {
       numVaults: vaults.length,
-      numTiers: prizePoolInfo.numberOfTiers,
+      numTiers: prizePoolInfo.numTiers,
+      numPrizeIndices: prizePoolInfo.numPrizeIndices,
       numAccounts,
       numPrizes: claims.length,
+      prizePoolReserve: prizePoolInfo.reserve,
       amountsTotal: sumPrizeAmounts(tierPrizeAmounts),
       tierPrizeAmounts: mapTierPrizeAmountsToString(tierPrizeAmounts),
       tierAccrualDurationInDraws: mapBigNumbersToStrings(tierAccrualDurationsInDraws),
