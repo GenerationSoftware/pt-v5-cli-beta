@@ -409,10 +409,10 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
   integrity sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
 
-"@generationsoftware/pt-v5-utils-js@0.0.1-beta.35":
-  version "0.0.1-beta.35"
-  resolved "https://registry.yarnpkg.com/@generationsoftware/pt-v5-utils-js/-/pt-v5-utils-js-0.0.1-beta.35.tgz#daaa5407cecc7d545cca6b0225b5699e082c5318"
-  integrity sha512-0qM91+owewWa5nukaZaJfKimfnKMhctAcvCiO5ql6WnsoZF5hF/B7/7XcZnJSXvH/U6Lb6XVYdwkxqqKrO2h1A==
+"@generationsoftware/pt-v5-utils-js@0.0.1-beta.36":
+  version "0.0.1-beta.36"
+  resolved "https://registry.yarnpkg.com/@generationsoftware/pt-v5-utils-js/-/pt-v5-utils-js-0.0.1-beta.36.tgz#4add0eb900bb7d2b56af10c441e3e6d58a4c7dfe"
+  integrity sha512-Bl9GsrIJfdB+kmKu0Ej0Wsyvkr2A7VMYJAaYRnCJu7pWd9+tONf/zLWbmVeWy79hRYsZ40b8C30D66iDkFRfRQ==
   dependencies:
     "@pooltogether/contract-list-schema" "^0.1.4"
     "@types/lodash" "^4.14.195"
