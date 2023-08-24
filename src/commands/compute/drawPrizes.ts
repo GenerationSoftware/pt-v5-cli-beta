@@ -23,7 +23,6 @@ import {
   mapTierPrizeAmountsToString,
   addTierPrizeAmountsToClaims,
   addUserAndTotalSupplyTwabsToClaims,
-  addIsTimeRangeSafeToClaims,
   TierPrizeAmounts,
 } from "../../lib/utils/prizeAmounts";
 
@@ -161,31 +160,12 @@ export default class DrawPrizes extends Command {
       prizePoolContract
     );
 
-    // NEW 2
-    const drawStartTimestamp = await prizePoolContract?.lastClosedDrawStartedAt();
-    // this.log(`drawStartTimestamp: ${drawStartTimestamp.toString()}`);
-    const drawEndTimestamp = await prizePoolContract?.lastClosedDrawEndedAt();
-    // this.log(`drawEndTimestamp: ${drawEndTimestamp.toString()}`);
-
-    const twabControllerContract = await getTwabControllerByAddress(
-      Number(chainId),
-      await prizePoolContract?.twabController(),
-      readProvider
-    );
-    this.log(`addIsTimeRangeSafeToClaims`);
-    const claimsExtended = await addIsTimeRangeSafeToClaims(
-      claimsWithUserAndTotalSupplyTwab,
-      drawStartTimestamp,
-      drawEndTimestamp,
-      twabControllerContract
-    );
-
     /* -------------------------------------------------- */
     // Write to Disk
     /* -------------------------------------------------- */
     this.log(`writeToOutput prizes`);
-    writeToOutput(outDirWithSchema, "prizes", claimsExtended);
-    writePrizesToOutput(outDirWithSchema, claimsExtended);
+    writeToOutput(outDirWithSchema, "prizes", claimsWithUserAndTotalSupplyTwab);
+    writePrizesToOutput(outDirWithSchema, claimsWithUserAndTotalSupplyTwab);
 
     this.log(`updateStatusSuccess`);
     const statusSuccess = updateStatusSuccess(DrawPrizes.statusLoading.createdAt, {
