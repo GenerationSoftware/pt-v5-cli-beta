@@ -1,14 +1,14 @@
 <p align="center">
-  <a href="https://github.com/pooltogether/pooltogether--brand-assets">
-    <img src="https://github.com/pooltogether/pooltogether--brand-assets/blob/977e03604c49c63314450b5d432fe57d34747c66/logo/pooltogether-logo--purple-gradient.png?raw=true" alt="PoolTogether Brand" style="max-width:100%;" width="200">
-  </a>
+  <img src="https://raw.githubusercontent.com/GenerationSoftware/pt-v5-utils-js/main/img/pooltogether-logo--purple@2x.png?raw=true" alt="PoolTogether Brand" style="max-width:100%;" width="300">
 </p>
 
 <br />
 
-# PoolTogether V5 CLI
+# 🖥️ PoolTogether V5
 
-The `@generationsoftware/pt-v5-cli` [node module package](https://www.npmjs.com/package/@generationsoftware/pt-v5-cli) is a NODE command line interface (CLI) to interact with the **PoolTogether V5 protocol**. The CLI uses the `v5-autotasks-library` modules to fetch and run calculations/computations for essential PoolTogether V5 tasks.
+### CLI
+
+The `@generationsoftware/pt-v5-cli` [node module package](https://www.npmjs.com/package/@generationsoftware/pt-v5-cli) is a Node command line interface (CLI) to interact with the **PoolTogether V5 protocol**. The CLI uses the `v5-autotasks-library` modules to fetch and run calculations/computations for essential PoolTogether V5 tasks.
 
 Primary CLI Commands (help)
 
@@ -19,6 +19,7 @@ npx @generationsoftware/pt-v5-cli help compute drawPrizes
 # ⌨️ CLI Installation
 
 <!-- usage -->
+
 ```sh-session
 $ npm install -g @generationsoftware/pt-v5-cli
 $ ptv5 COMMAND
@@ -30,6 +31,7 @@ USAGE
   $ ptv5 COMMAND
 ...
 ```
+
 <!-- usagestop -->
 
 # Commands
@@ -56,6 +58,34 @@ EXAMPLES
     Running compute:drawPrizes on chainId: 1
 ```
 
+## Prizes File (prizes.json)
+
+```json
+[
+  {
+    "vault": "0x0bfe04201c496a9994b920deb6087a60bdadfbbb",
+    "winner": "0x07967251f6db5f9d095119379bd8fc4fce60b3e1",
+    "tier": 3,
+    "prizeIndex": 11,
+    "claimed": true,
+    "amount": "1633936709514027714",
+    "userTwab": "9825531597725820105644",
+    "totalSupplyTwab": "17763495565196552485474598"
+  },
+  {
+    "vault": "0x0bfe04201c496a9994b920deb6087a60bdadfbbb",
+    "winner": "0x084039db4e3c6775eabfc59cbd3725d3d9a6d752",
+    "tier": 2,
+    "prizeIndex": 1,
+    "claimed": false,
+    "amount": "1633936709514027714",
+    "userTwab": "9722898152768139799112",
+    "totalSupplyTwab": "17763495565196552485474598"
+  },
+  ...
+]
+```
+
 ## Status File (status.json)
 
 ```json
@@ -70,12 +100,36 @@ EXAMPLES
 ```json
 {
   "status": "SUCCESS",
-  "createdAt": "11",
-  "updatedAt": "33",
-  "runtime": "22",
+  "createdAt": 1693423691768,
+  "updatedAt": 1693423805132,
+  "runtime": 114,
   "meta": {
-    "prizeLength": "10",
-    "amountsTotal": "5000000"
+    "numVaults": 7,
+    "numTiers": 3,
+    "numPrizeIndices": 21,
+    "numAccounts": 3830,
+    "numPrizes": 21,
+    "prizePoolReserve": "431450369493570544008",
+    "amountsTotal": "318001330964753848953",
+    "tierPrizeAmounts": {
+      "0": "271304907889060131200",
+      "1": "45062486366179690039",
+      "2": "1633936709514027714"
+    },
+    "tierAccrualDurationInDraws": {
+      "0": "13",
+      "1": "1",
+      "2": "1"
+    },
+    "vaultPortions": {
+      "0x0410cae69dd01f58224d54881648e35c6cb874fa": "12491920408565",
+      "0x0bfe04201c496a9994b920deb6087a60bdadfbbb": "973235150974337855",
+      "0x4b7a2e1a70ea05523542c9189fa51b133884f321": "232229504251603",
+      "0x9e11c3d53a68c07f6d839e5d89a94052753cedcb": "5916502876505634",
+      "0xb9a647d3391b939cb49b44d3c5e93c63d96ad4a4": "9173734225780914",
+      "0xe2ef926250b0e8a07578d76d9f57e5092340a6fa": "11429890498715426",
+      "0xffb08a9ffc360806be7ef8cf815c1274ef92cea9": "0"
+    }
   }
 }
 ```
