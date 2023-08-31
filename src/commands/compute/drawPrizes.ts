@@ -124,8 +124,6 @@ export default class DrawPrizes extends Command {
     // #3. Page through and concat all accounts for all vaults
     this.log(`populateSubgraphVaultAccounts`);
     vaults = await populateSubgraphVaultAccounts(Number(chainId), vaults);
-    // console.log("vaults");
-    // console.log(vaults);
 
     // #4. Determine winners for last draw
     let claims: Claim[] = await getWinnersClaims(readProvider, prizePoolInfo, contracts, vaults);
