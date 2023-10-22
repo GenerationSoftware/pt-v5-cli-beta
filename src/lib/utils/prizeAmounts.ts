@@ -1,6 +1,6 @@
 import { Contract } from 'ethers'
 import { BigNumber } from '@ethersproject/bignumber'
-import { Claim } from '@generationsoftware/pt-v5-utils-js'
+import { Claim } from '@generationsoftware/pt-v5-utils-js-beta'
 
 export interface TierPrizeAmounts {
   [tier: string]: BigNumber;

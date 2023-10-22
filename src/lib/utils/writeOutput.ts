@@ -1,4 +1,4 @@
-import { Claim } from '@generationsoftware/pt-v5-utils-js'
+import { Claim } from '@generationsoftware/pt-v5-utils-js-beta'
 import { writeFileSync, mkdirSync} from 'fs'
 type File = any
 
