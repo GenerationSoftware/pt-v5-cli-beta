@@ -1,12 +1,12 @@
 {
-  "name": "@generationsoftware/pt-v5-cli",
+  "name": "@generationsoftware/pt-v5-cli-beta",
   "description": "PoolTogether V5 Command Line Interface",
   "author": "PoolTogether Inc",
   "license": "GPL-3.0-only",
   "version": "0.0.1-beta.45",
-  "repository": "https://github.com/pooltogether/v5-cli",
-  "homepage": "https://github.com/pooltogether/v5-cli",
-  "bugs": "https://github.com/pooltogether/v5-cli/issues",
+  "repository": "https://github.com/generationsoftware/pt-v5-cli-beta",
+  "homepage": "https://github.com/generationsoftware/pt-v5-cli-beta",
+  "bugs": "https://github.com/generationsoftware/v5-cli/issues",
   "main": "dist/index.js",
   "files": [
     "/bin",
