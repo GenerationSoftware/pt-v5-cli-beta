@@ -19,19 +19,17 @@ npx @generationsoftware/pt-v5-cli help compute drawPrizes
 # ⌨️ CLI Installation
 
 <!-- usage -->
-
 ```sh-session
-$ npm install -g @generationsoftware/pt-v5-cli
+$ npm install -g @generationsoftware/pt-v5-cli-beta
 $ ptv5 COMMAND
 running command...
 $ ptv5 (--version)
-@generationsoftware/pt-v5-cli/0.0.1-beta.45 darwin-arm64 node-v18.16.0
+@generationsoftware/pt-v5-cli-beta/0.0.1-beta.46 darwin-arm64 node-v16.14.2
 $ ptv5 --help [COMMAND]
 USAGE
   $ ptv5 COMMAND
 ...
 ```
-
 <!-- usagestop -->
 
 # Commands
